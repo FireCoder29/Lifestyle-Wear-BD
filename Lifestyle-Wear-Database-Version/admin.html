@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lifestyle Wear — Stock Admin</title>
+<style>
+body{font-family:Arial,sans-serif;background:#f5f1e9;color:#11110f;margin:0;padding:30px}.wrap{max-width:900px;margin:auto}.card{background:#fff;padding:24px;margin:16px 0;border:1px solid #ded9cf;border-radius:12px}input,button{padding:12px;border:1px solid #ccc;border-radius:8px}input{width:100%;box-sizing:border-box}button{cursor:pointer;background:#111;color:#fff}.row{display:grid;grid-template-columns:1fr 120px 120px;gap:10px;align-items:center;border-top:1px solid #eee;padding:14px 0}.muted{color:#777}@media(max-width:650px){.row{grid-template-columns:1fr}.row input{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>Lifestyle Wear — Stock Admin</h1>
+<p class="muted">This page changes the stock in the database. Keep the admin key private.</p>
+<div class="card">
+<label>Backend URL</label><br><input id="api" value="http://127.0.0.1:8000"><br><br>
+<label>Admin key</label><br><input id="key" type="password" placeholder="Your LW_ADMIN_KEY"><br><br>
+<button onclick="loadProducts()">Load products</button>
+</div>
+<div class="card" id="products">Enter the backend URL and admin key, then load products.</div>
+</div>
+<script>
+async function loadProducts(){
+ const api=document.getElementById('api').value.replace(/\/$/,'');
+ try{
+  const r=await fetch(api+'/api/products');
+  const data=await r.json();
+  document.getElementById('products').innerHTML=data.map(p=>`<div class="row"><div><b>${esc(p.name)}</b><div class="muted">ID: ${p.id} · Current stock: ${p.stock}</div></div><input id="s-${p.id}" type="number" min="0" value="${p.stock}"><button onclick="saveStock(${p.id})">Save</button></div>`).join('');
+ }catch(e){document.getElementById('products').textContent='Could not connect to backend: '+e.message;}
+}
+async function saveStock(id){
+ const api=document.getElementById('api').value.replace(/\/$/,'');
+ const key=document.getElementById('key').value;
+ const stock=Number(document.getElementById('s-'+id).value);
+ const r=await fetch(api+'/api/admin/products/'+id+'/stock',{method:'PUT',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({stock})});
+ const data=await r.json();
+ if(!r.ok){alert(data.detail||'Failed');return;}
+ alert(data.name+' stock updated to '+data.stock);
+ loadProducts();
+}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+</script>
+</body>
+</html>

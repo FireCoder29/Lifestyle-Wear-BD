@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop — Lifestyle Wear</title>
+<link rel="icon" href="images/Logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="announcement"><div class="announcement-track">
+<span>FREE DELIVERY ON SELECTED ORDERS</span><i>✦</i><span>LIFESTYLE WEAR</span><i>✦</i>
+<span>YOUR TRUST, OUR STANDARD</span><i>✦</i><span>NEW COLLECTION IS HERE</span><i>✦</i>
+</div></div>
+
+<header class="nav"><div class="nav-inner">
+<button class="mobile-menu" id="menuBtn">☰</button>
+<a class="logo" href="index.html"><img src="images/Logo.png" alt="Lifestyle Wear"></a>
+<nav class="desktop-nav"><a href="index.html">Home</a><a class="active-link" href="products.html">Shop</a><a href="products.html#new">New Arrivals</a><a href="index.html#categories">Collections</a></nav>
+<div class="nav-tools"><button id="searchBtn" class="round-btn">⌕</button><button id="cartBtn" class="bag-btn"><span>Bag</span><b id="cartCount">0</b></button></div>
+</div></header>
+
+<div class="searchbar" id="searchbar"><input id="searchInput" type="search" placeholder="Search your next look..."><button id="closeSearch">×</button></div>
+
+<aside class="mobile-panel" id="mobilePanel"><button class="panel-close" id="closeMenu">×</button><p class="eyebrow">LIFESTYLE WEAR</p>
+<a href="index.html">Home</a><a href="products.html">Shop all</a><a href="#new">New arrivals</a><a href="index.html#categories">Collections</a></aside>
+<div class="screen" id="screen"></div>
+
+<main class="products-page">
+<section class="shop-hero">
+<div><p class="eyebrow">LIFESTYLE WEAR / SHOP</p><h1>Find your<br><em>next look.</em></h1></div>
+<p>Explore the complete collection. Tap any product to see its details, then tap anywhere outside the details to return.</p>
+</section>
+
+<section class="product-browser" id="new">
+<div class="browser-top">
+<div class="category-tabs" id="categoryTabs"></div>
+<div class="result-tools"><span id="resultCount"></span><button id="allProducts" class="outline-btn">All products ↗</button></div>
+</div>
+<div class="product-grid large-grid" id="productGrid"></div>
+</section>
+</main>
+
+<!-- Product details overlay.
+     Clicking the dark area outside the card closes it.
+     X button also closes it.
+-->
+<div class="product-overlay" id="productOverlay">
+<div class="product-detail-card" id="productDetailCard">
+<button class="detail-close" id="detailClose">×</button>
+<div class="detail-image"><img id="detailImage" src="" alt=""></div>
+<div class="detail-content">
+<p class="eyebrow" id="detailCategory"></p>
+<h2 id="detailName"></h2>
+<div class="detail-price">৳<span id="detailPrice"></span></div>
+<div class="detail-divider"></div>
+<p id="detailDescription"></p>
+
+<div class="detail-meta">
+<div><span>QUALITY</span><strong>Selected with care</strong></div>
+<div><span>DELIVERY</span><strong>৳100 standard</strong></div>
+</div>
+
+<button class="dark-btn full" id="detailAdd">Add to bag <span>+</span></button>
+<p class="tap-hint">Tap outside this panel to close</p>
+</div>
+</div>
+</div>
+
+<!-- CART -->
+<aside class="cart" id="cart"><div class="cart-top"><div><p class="eyebrow">YOUR SELECTION</p><h2>Your bag <span id="drawerCount">0</span></h2></div><button id="closeCart">×</button></div>
+<div class="cart-list" id="cartList"></div><div class="cart-bottom"><div class="subtotal"><span>Subtotal</span><strong>৳<span id="subtotal">0</span></strong></div>
+<p class="delivery-line">Delivery: ৳<span id="delivery">100</span></p><button class="dark-btn full" id="checkoutBtn">Order on WhatsApp <span>↗</span></button><button class="clear-btn" id="clearCart">Clear bag</button></div></aside>
+
+<div class="modal" id="checkoutModal"><div class="checkout-card"><button class="modal-x" id="closeCheckout">×</button><p class="eyebrow">ALMOST THERE</p><h2>Complete your<br><em>order.</em></h2>
+<p class="checkout-note">We'll open WhatsApp with your order details ready to send.</p><form id="checkoutForm">
+<label>Name <input id="customerName" required placeholder="Your name"></label>
+<label>Phone <input id="customerPhone" required type="tel" placeholder="01XXXXXXXXX"></label>
+<label>Delivery address <textarea id="customerAddress" required placeholder="Full delivery address"></textarea></label>
+<label>Note <textarea id="customerNote" placeholder="Size, color or other note (optional)"></textarea></label>
+<div class="checkout-total"><span>Total</span><strong>৳<span id="checkoutTotal">0</span></strong></div>
+<button class="dark-btn full" type="submit">Continue to WhatsApp <span>↗</span></button>
+</form></div></div>
+
+<footer id="footer"><div class="footer-main">
+<div class="footer-brand"><img src="images/Logo.png" alt="Lifestyle Wear"><p>Your trust, Our standard.</p></div>
+<div><p class="footer-title">EXPLORE</p><a href="index.html">Home</a><a href="products.html">Shop</a><a href="#new">New Arrivals</a></div>
+<div><p class="footer-title">HELP</p><a href="#">Delivery</a><a href="#">Returns</a><a href="#">Privacy</a></div>
+<div><p class="footer-title">CONTACT</p><a href="tel:01615574500">01615574500</a><a href="https://wa.me/8801615574500" target="_blank">WhatsApp ↗</a></div>
+</div><div class="footer-bottom"><span>© 2026 Lifestyle Wear</span><span>Your Trust, Our Standard.</span></div></footer>
+
+<script src="script.js"></script>
+</body>
+</html>
