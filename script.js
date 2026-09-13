@@ -111,6 +111,12 @@ const PRODUCTS = [
   }
 ];
 
+/* ==========================================================
+   ONLINE DATABASE
+   ========================================================== */
+
+const API_BASE_URL = "https://lifestyle-wear-bd.onrender.com";
+let stockReady = false;
 
 /* ==========================================================
    BASIC SETTINGS
@@ -137,34 +143,60 @@ const placeholder =
 
 
 /* ==========================================================
-   LOAD SAVED STOCK
+   LOAD STOCK FROM ONLINE DATABASE
    ========================================================== */
 
-/*
-   Stock is saved in the customer's browser.
+async function loadDatabaseStock(){
 
-   IMPORTANT:
-   GitHub Pages cannot create one shared stock database.
-   This means stock is saved separately on each browser.
-*/
+  try{
 
-const SAVED_STOCK =
-  JSON.parse(localStorage.getItem("LW_STOCK") || "{}");
+    const response =
+      await fetch(`${API_BASE_URL}/api/products`);
+
+    if(!response.ok)
+      throw new Error("Failed to load stock");
+
+    const databaseProducts =
+      await response.json();
 
 
-PRODUCTS.forEach(product => {
+    databaseProducts.forEach(dbProduct => {
 
-  if(
-    Object.prototype.hasOwnProperty.call(
-      SAVED_STOCK,
-      product.id
-    )
-  ){
-    product.stock = Number(SAVED_STOCK[product.id]);
+      const product =
+        PRODUCTS.find(
+          p => p.id === dbProduct.id
+        );
+
+      if(product){
+
+        product.stock =
+          Number(dbProduct.stock);
+
+      }
+
+    });
+
+
+    stockReady = true;
+
+    renderFeatured();
+    renderProductsPage();
+    renderCart();
+
+  }catch(error){
+
+    console.error(
+      "Database stock error:",
+      error
+    );
+
+    alert(
+      "Unable to load live stock. Please refresh the page."
+    );
+
   }
 
-});
-
+}
 
 /* ==========================================================
    CART
@@ -215,23 +247,7 @@ function save(){
 }
 
 
-/* ==========================================================
-   SAVE STOCK
-   ========================================================== */
 
-function saveStock(){
-
-  const stockData = {};
-
-  PRODUCTS.forEach(product => {
-    stockData[product.id] = product.stock;
-  });
-
-  localStorage.setItem(
-    "LW_STOCK",
-    JSON.stringify(stockData)
-  );
-}
 
 
 /* ==========================================================
@@ -1069,6 +1085,56 @@ function renderFeatured(){
 
 }
 
+/* ==========================================================
+   SUBMIT ORDER TO ONLINE DATABASE
+   ========================================================== */
+
+async function submitDatabaseOrder(customer){
+
+  const response =
+    await fetch(`${API_BASE_URL}/api/orders`, {
+
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json"
+      },
+
+      body: JSON.stringify({
+
+        customer_name: customer.name,
+        customer_phone: customer.phone,
+        customer_address: customer.address,
+        customer_note: customer.note,
+
+        items: cart.map(item => ({
+          product_id: item.id,
+          quantity: item.qty
+        }))
+
+      })
+
+    });
+
+
+  const data =
+    await response.json();
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data.detail ||
+      "Order could not be completed."
+    );
+
+  }
+
+
+  return data;
+
+}
+
 
 /* ==========================================================
    WHATSAPP ORDER MESSAGE
@@ -1173,10 +1239,12 @@ function buildMessage(customer){
 $("checkoutForm")
   ?.addEventListener(
     "submit",
-    e => {
+    async e => {
 
       e.preventDefault();
 
+
+      /* BAG EMPTY CHECK */
 
       if(!cart.length){
 
@@ -1187,6 +1255,27 @@ $("checkoutForm")
         return;
 
       }
+
+
+      /* LIVE STOCK CHECK */
+
+      if(!stockReady){
+
+        alert(
+          "Live stock is still loading. Please wait a moment and try again."
+        );
+
+        return;
+
+      }
+
+
+      /* REFRESH LIVE STOCK */
+
+      await loadDatabaseStock();
+
+      if(!stockReady)
+        return;
 
 
       /* CHECK STOCK ONE MORE TIME */
@@ -1245,70 +1334,74 @@ $("checkoutForm")
       };
 
 
-      /* BUILD MESSAGE BEFORE STOCK CHANGES */
+      /* BUILD MESSAGE BEFORE ORDER */
 
       const message =
         buildMessage(customer);
 
 
-      /* REDUCE STOCK */
+      /* SEND ORDER TO ONLINE DATABASE */
 
-      cart.forEach(item => {
+      try{
 
-        const product =
-          PRODUCTS.find(
-            p => p.id === item.id
-          );
-
-
-        if(product){
-
-          product.stock =
-            Math.max(
-              0,
-              product.stock -
-              item.qty
-            );
-
-        }
-
-      });
+        await submitDatabaseOrder(
+          customer
+        );
 
 
-      /* SAVE NEW STOCK */
-
-      saveStock();
+        /* ORDER SUCCESSFUL */
 
 
-      /* CLEAR BAG */
+        /* CLEAR BAG */
 
-      cart = [];
+        cart = [];
 
-      save();
-
-
-      /* UPDATE EVERYTHING */
-
-      renderCart();
-
-      renderFeatured();
-
-      renderProductsPage();
+        save();
 
 
-      /* CLOSE CHECKOUT */
+        /* UPDATE WEBSITE */
 
-      $("checkoutModal")
-        ?.classList
-        .remove("show");
+        renderCart();
+
+        renderFeatured();
+
+        renderProductsPage();
 
 
-      /* OPEN WHATSAPP */
+        /* CLOSE CHECKOUT */
 
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`,
-        "_blank"
-      );
+        $("checkoutModal")
+          ?.classList
+          .remove("show");
+
+
+        /* OPEN WHATSAPP */
+
+        window.open(
+          `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`,
+          "_blank"
+        );
+
+
+        /* GET UPDATED STOCK */
+
+        loadDatabaseStock();
+
+
+      }catch(error){
+
+        console.error(
+          "Order error:",
+          error
+        );
+
+
+        alert(
+          error.message ||
+          "Order could not be completed. Please try again."
+        );
+
+      }
 
     }
   );
@@ -1626,3 +1719,12 @@ renderFeatured();
 renderProductsPage();
 
 renderCart();
+
+/* LOAD LIVE STOCK */
+loadDatabaseStock();
+
+/* AUTO SYNC LIVE STOCK EVERY 5 SECONDS */
+setInterval(
+  loadDatabaseStock,
+  5000
+);
