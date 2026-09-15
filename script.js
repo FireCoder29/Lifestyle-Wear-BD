@@ -10,11 +10,11 @@ const DELIVERY_CHARGE = 100;
 
 /* CHANGE #3: Categories */
 const CATEGORIES = [
-  {name:"All", sub:"Everything"},
-  {name:"Dresses", sub:"Female Dress"},
-  {name:"Drop-Shoulder", sub:"everyday"},
-  {name:"T-Shirts", sub:"Casual"},
-  {name:"New Arrivals", sub:"Just in"}
+  { name: "All", sub: "Everything" },
+  { name: "Dresses", sub: "Female Dress" },
+  { name: "Drop-Shoulder", sub: "everyday" },
+  { name: "T-Shirts", sub: "Casual" },
+  { name: "New Arrivals", sub: "Just in" }
 ];
 
 /* CHANGE #4: Products
@@ -23,91 +23,91 @@ const CATEGORIES = [
 */
 const PRODUCTS = [
   {
-    id:1,
-    name:"Drop-Shoulder - 1",
-    price:550,
-    image:"images/DS-1.webp",
-    category:"Drop-Shoulder",
-    stock:15,   //Use this in console -> localStorage.removeItem("LW_STOCK");
-    badge:"You know",
-    description:"A clean, comfortable piece selected for everyday elegance."
+    id: 1,
+    name: "Drop-Shoulder - 1",
+    price: 550,
+    image: "images/DS-1.webp",
+    category: "Drop-Shoulder",
+    stock: 15,   //Use this in console -> localStorage.removeItem("LW_STOCK");
+    badge: "You know",
+    description: "A clean, comfortable piece selected for everyday elegance."
   },
 
   {
-    id:2,
-    name:"Drop-Shoulder - 2",
-    price:550,
-    image:"images/DS-2.webp",
-    category:"Drop-Shoulder",
-    stock:15, 
-    badge:"NEW",
-    description:"An effortless silhouette designed for comfort and confidence."
+    id: 2,
+    name: "Drop-Shoulder - 2",
+    price: 550,
+    image: "images/DS-2.webp",
+    category: "Drop-Shoulder",
+    stock: 15,
+    badge: "NEW",
+    description: "An effortless silhouette designed for comfort and confidence."
   },
 
   {
-    id:3,
-    name:"Drop-Shoulder - 3",
-    price:550,
-    image:"images/DS-3.jpg",
-    category:"Drop-Shoulder",
-    stock:20,
-    badge:"",
-    description:"Simple, versatile and easy to style."
+    id: 3,
+    name: "Drop-Shoulder - 3",
+    price: 550,
+    image: "images/DS-3.jpg",
+    category: "Drop-Shoulder",
+    stock: 20,
+    badge: "",
+    description: "Simple, versatile and easy to style."
   },
 
   {
-    id:4,
-    name:"Drop-Shoulder - 4",
-    price:550,
-    image:"images/DS-4.webp",
-    category:"Drop-Shoulder",
-    stock:15,
-    badge:"POPULAR",
-    description:"A refined everyday essential with a clean finish."
+    id: 4,
+    name: "Drop-Shoulder - 4",
+    price: 550,
+    image: "images/DS-4.webp",
+    category: "Drop-Shoulder",
+    stock: 15,
+    badge: "POPULAR",
+    description: "A refined everyday essential with a clean finish."
   },
 
   {
-    id:5,
-    name:"Minimalist T-Shirt",
-    price:450,
-    image:"images/TS-1.jpg",
-    category:"T-Shirts",
-    stock:25,
-    badge:"",
-    description:"Minimal styling and everyday comfort."
+    id: 5,
+    name: "Minimalist T-Shirt",
+    price: 450,
+    image: "images/TS-1.jpg",
+    category: "T-Shirts",
+    stock: 25,
+    badge: "",
+    description: "Minimal styling and everyday comfort."
   },
 
   {
-    id:6,
-    name:"New Arrival T-Shirt",
-    price:450,
-    image:"images/TS-2.jpg",
-    category:"New Arrivals",
-    stock:30,
-    badge:"NEW",
-    description:"One of the latest pieces in the Lifestyle Wear edit."
+    id: 6,
+    name: "New Arrival T-Shirt",
+    price: 450,
+    image: "images/TS-2.jpg",
+    category: "New Arrivals",
+    stock: 30,
+    badge: "NEW",
+    description: "One of the latest pieces in the Lifestyle Wear edit."
   },
 
   {
-    id:7,
-    name:"Female Everyday Dress",
-    price:1500,
-    image:"images/FD-1.jpg",
-    category:"Dresses",
-    stock:20,
-    badge:"BEST",
-    description:"A standout everyday piece from our signature selection."
+    id: 7,
+    name: "Female Everyday Dress",
+    price: 1500,
+    image: "images/FD-1.jpg",
+    category: "Dresses",
+    stock: 20,
+    badge: "BEST",
+    description: "A standout everyday piece from our signature selection."
   },
 
   {
-    id:8,
-    name:"Female Everyday Dress - 2",
-    price:1500,
-    image:"images/FD-2.jpg",
-    category:"Dresses",
-    stock:25,
-    badge:"",
-    description:"Made to be worn, repeated and enjoyed."
+    id: 8,
+    name: "Female Everyday Dress - 2",
+    price: 1500,
+    image: "images/FD-2.jpg",
+    category: "Dresses",
+    stock: 25,
+    badge: "",
+    description: "Made to be worn, repeated and enjoyed."
   }
 ];
 
@@ -146,14 +146,14 @@ const placeholder =
    LOAD STOCK FROM ONLINE DATABASE
    ========================================================== */
 
-async function loadDatabaseStock(){
+async function loadDatabaseStock() {
 
-  try{
+  try {
 
     const response =
       await fetch(`${API_BASE_URL}/api/products`);
 
-    if(!response.ok)
+    if (!response.ok)
       throw new Error("Failed to load stock");
 
     const databaseProducts =
@@ -167,7 +167,7 @@ async function loadDatabaseStock(){
           p => p.id === dbProduct.id
         );
 
-      if(product){
+      if (product) {
 
         product.stock =
           Number(dbProduct.stock);
@@ -183,7 +183,7 @@ async function loadDatabaseStock(){
     renderProductsPage();
     renderCart();
 
-  }catch(error){
+  } catch (error) {
 
     console.error(
       "Database stock error:",
@@ -226,11 +226,11 @@ const escape = s =>
   String(s).replace(
     /[&<>"']/g,
     m => ({
-      "&":"&amp;",
-      "<":"&lt;",
-      ">":"&gt;",
-      '"':"&quot;",
-      "'":"&#039;"
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
     }[m])
   );
 
@@ -239,7 +239,7 @@ const escape = s =>
    SAVE CART
    ========================================================== */
 
-function save(){
+function save() {
   localStorage.setItem(
     "LW_CART",
     JSON.stringify(cart)
@@ -254,20 +254,20 @@ function save(){
    CART CALCULATIONS
    ========================================================== */
 
-function quantity(){
+function quantity() {
 
   return cart.reduce(
-    (total,item) => total + item.qty,
+    (total, item) => total + item.qty,
     0
   );
 
 }
 
 
-function subtotal(){
+function subtotal() {
 
   return cart.reduce(
-    (total,item) => {
+    (total, item) => {
 
       const product =
         PRODUCTS.find(p => p.id === item.id);
@@ -288,17 +288,17 @@ function subtotal(){
    ADD PRODUCT TO BAG
    ========================================================== */
 
-function add(id){
+function add(id) {
 
   const product =
     PRODUCTS.find(p => p.id === id);
 
-  if(!product) return;
+  if (!product) return;
 
 
   /* STOCK OUT CHECK */
 
-  if(product.stock <= 0){
+  if (product.stock <= 0) {
 
     alert("Sorry, this product is out of stock.");
 
@@ -318,7 +318,7 @@ function add(id){
 
   /* STOCK LIMIT */
 
-  if(currentQty >= product.stock){
+  if (currentQty >= product.stock) {
 
     alert(
       `Only ${product.stock} item(s) available in stock.`
@@ -330,15 +330,15 @@ function add(id){
 
   /* ADD PRODUCT */
 
-  if(item){
+  if (item) {
 
     item.qty++;
 
-  }else{
+  } else {
 
     cart.push({
-      id:id,
-      qty:1
+      id: id,
+      qty: 1
     });
 
   }
@@ -357,25 +357,25 @@ function add(id){
    CHANGE CART QUANTITY
    ========================================================== */
 
-function change(id,n){
+function change(id, n) {
 
   const item =
     cart.find(x => x.id === id);
 
-  if(!item) return;
+  if (!item) return;
 
 
   const product =
     PRODUCTS.find(p => p.id === id);
 
-  if(!product) return;
+  if (!product) return;
 
 
   /* INCREASE */
 
-  if(n > 0){
+  if (n > 0) {
 
-    if(item.qty >= product.stock){
+    if (item.qty >= product.stock) {
 
       alert(
         `Only ${product.stock} item(s) available in stock.`
@@ -392,7 +392,7 @@ function change(id,n){
 
   /* REMOVE IF ZERO */
 
-  if(item.qty <= 0){
+  if (item.qty <= 0) {
 
     cart =
       cart.filter(x => x.id !== id);
@@ -411,7 +411,7 @@ function change(id,n){
    REMOVE ITEM
    ========================================================== */
 
-function removeItem(id){
+function removeItem(id) {
 
   cart =
     cart.filter(x => x.id !== id);
@@ -427,30 +427,30 @@ function removeItem(id){
    RENDER CART
    ========================================================== */
 
-function renderCart(){
+function renderCart() {
 
   const q = quantity();
   const sub = subtotal();
 
 
-  if($("cartCount"))
+  if ($("cartCount"))
     $("cartCount").textContent = q;
 
 
-  if($("drawerCount"))
+  if ($("drawerCount"))
     $("drawerCount").textContent = q;
 
 
-  if($("subtotal"))
+  if ($("subtotal"))
     $("subtotal").textContent = money(sub);
 
 
-  if($("delivery"))
+  if ($("delivery"))
     $("delivery").textContent =
       money(DELIVERY_CHARGE);
 
 
-  if($("checkoutTotal"))
+  if ($("checkoutTotal"))
     $("checkoutTotal").textContent =
       money(
         sub +
@@ -462,12 +462,12 @@ function renderCart(){
 
   const list = $("cartList");
 
-  if(!list) return;
+  if (!list) return;
 
 
   /* EMPTY BAG */
 
-  if(!cart.length){
+  if (!cart.length) {
 
     list.innerHTML = `
       <div class="empty">
@@ -489,7 +489,7 @@ function renderCart(){
     const product =
       PRODUCTS.find(p => p.id === x.id);
 
-    if(!product) return;
+    if (!product) return;
 
 
     const el =
@@ -551,12 +551,12 @@ function renderCart(){
 
     el.querySelector(".minus")
       .onclick =
-      () => change(product.id,-1);
+      () => change(product.id, -1);
 
 
     el.querySelector(".plus")
       .onclick =
-      () => change(product.id,1);
+      () => change(product.id, 1);
 
 
     el.querySelector(".remove")
@@ -575,7 +575,7 @@ function renderCart(){
    CART OPEN / CLOSE
    ========================================================== */
 
-function openCart(){
+function openCart() {
 
   $("cart")?.classList.add("open");
 
@@ -584,15 +584,15 @@ function openCart(){
 }
 
 
-function closeCart(){
+function closeCart() {
 
   $("cart")?.classList.remove("open");
 
 
-  if(
+  if (
     !$("mobilePanel")
       ?.classList.contains("open")
-  ){
+  ) {
 
     $("screen")
       ?.classList.remove("show");
@@ -606,18 +606,18 @@ function closeCart(){
    HOME CATEGORIES
    ========================================================== */
 
-function renderCategoriesHome(){
+function renderCategoriesHome() {
 
   const grid =
     $("categoryGrid");
 
-  if(!grid) return;
+  if (!grid) return;
 
 
   grid.innerHTML = "";
 
 
-  CATEGORIES.forEach((cat,i) => {
+  CATEGORIES.forEach((cat, i) => {
 
     const el =
       document.createElement("a");
@@ -627,17 +627,16 @@ function renderCategoriesHome(){
 
 
     el.href =
-      `products.html${
-        cat.name === "All"
-          ? ""
-          : "?category=" +
-            encodeURIComponent(cat.name)
+      `products.html${cat.name === "All"
+        ? ""
+        : "?category=" +
+        encodeURIComponent(cat.name)
       }`;
 
 
     el.innerHTML = `
       <span class="num">
-        0${i+1}
+        0${i + 1}
       </span>
 
       <h3>
@@ -661,7 +660,7 @@ function renderCategoriesHome(){
    PRODUCT CARD
    ========================================================== */
 
-function productCard(p){
+function productCard(p) {
 
   const card =
     document.createElement("article");
@@ -713,15 +712,14 @@ function productCard(p){
 
     <div class="product-image">
 
-      ${
-        p.badge
-          ? `
+      ${p.badge
+      ? `
             <span class="product-badge">
               ${escape(p.badge)}
             </span>
           `
-          : ""
-      }
+      : ""
+    }
 
       <img
         src="${img(p.image)}"
@@ -771,9 +769,9 @@ function productCard(p){
     .querySelector(".product-image")
     .onclick = e => {
 
-      if(
+      if (
         !e.target.closest(".quick-view")
-      ){
+      ) {
 
         openProductDetail(p);
 
@@ -801,7 +799,7 @@ function productCard(p){
     .querySelector(".add-small")
     .onclick = () => {
 
-      if(p.stock > 0){
+      if (p.stock > 0) {
 
         add(p.id);
 
@@ -819,12 +817,12 @@ function productCard(p){
    PRODUCT DETAIL
    ========================================================== */
 
-function openProductDetail(p){
+function openProductDetail(p) {
 
   quickProduct = p;
 
 
-  if(!$("productOverlay"))
+  if (!$("productOverlay"))
     return;
 
 
@@ -867,7 +865,7 @@ function openProductDetail(p){
     $("detailStock");
 
 
-  if(stockElement){
+  if (stockElement) {
 
     stockElement.textContent =
       p.stock > 0
@@ -883,16 +881,16 @@ function openProductDetail(p){
     $("detailAdd");
 
 
-  if(detailAdd){
+  if (detailAdd) {
 
-    if(p.stock > 0){
+    if (p.stock > 0) {
 
       detailAdd.disabled = false;
 
       detailAdd.textContent =
         "Add to bag +";
 
-    }else{
+    } else {
 
       detailAdd.disabled = true;
 
@@ -913,7 +911,7 @@ function openProductDetail(p){
 
 
   history.pushState(
-    {product:p.id},
+    { product: p.id },
     "",
     `#product-${p.id}`
   );
@@ -925,9 +923,9 @@ function openProductDetail(p){
    CLOSE PRODUCT DETAIL
    ========================================================== */
 
-function closeProductDetail(){
+function closeProductDetail() {
 
-  if(!$("productOverlay"))
+  if (!$("productOverlay"))
     return;
 
 
@@ -939,11 +937,11 @@ function closeProductDetail(){
     .classList.remove("no-scroll");
 
 
-  if(
+  if (
     location.hash.startsWith(
       "#product-"
     )
-  ){
+  ) {
 
     history.replaceState(
       null,
@@ -964,19 +962,19 @@ function closeProductDetail(){
    PRODUCTS PAGE
    ========================================================== */
 
-function renderProductsPage(){
+function renderProductsPage() {
 
   const grid =
     $("productGrid");
 
-  if(!grid) return;
+  if (!grid) return;
 
 
   const tabs =
     $("categoryTabs");
 
 
-  if(tabs){
+  if (tabs) {
 
     tabs.innerHTML = "";
 
@@ -1036,7 +1034,7 @@ function renderProductsPage(){
     });
 
 
-  if($("resultCount")){
+  if ($("resultCount")) {
 
     $("resultCount").textContent =
       `${items.length} PRODUCTS`;
@@ -1062,19 +1060,19 @@ function renderProductsPage(){
    FEATURED PRODUCTS
    ========================================================== */
 
-function renderFeatured(){
+function renderFeatured() {
 
   const grid =
     $("featuredGrid");
 
-  if(!grid) return;
+  if (!grid) return;
 
 
   grid.innerHTML = "";
 
 
   PRODUCTS
-    .slice(0,4)
+    .slice(0, 4)
     .forEach(p => {
 
       grid.appendChild(
@@ -1089,7 +1087,7 @@ function renderFeatured(){
    SUBMIT ORDER TO ONLINE DATABASE
    ========================================================== */
 
-async function submitDatabaseOrder(customer){
+async function submitDatabaseOrder(customer) {
 
   const response =
     await fetch(`${API_BASE_URL}/api/orders`, {
@@ -1102,10 +1100,12 @@ async function submitDatabaseOrder(customer){
 
       body: JSON.stringify({
 
-        customer_name: customer.name,
-        customer_phone: customer.phone,
-        customer_address: customer.address,
-        customer_note: customer.note,
+        customer: {
+          name: customer.name,
+          phone: customer.phone,
+          address: customer.address,
+          note: customer.note
+        },
 
         items: cart.map(item => ({
           product_id: item.id,
@@ -1121,11 +1121,28 @@ async function submitDatabaseOrder(customer){
     await response.json();
 
 
-  if(!response.ok){
+  if (!response.ok) {
+
+    let errorMessage =
+      "Order could not be completed.";
+
+    if (typeof data.detail === "string") {
+
+      errorMessage =
+        data.detail;
+
+    }
+    else if (data.detail) {
+
+      errorMessage =
+        JSON.stringify(
+          data.detail
+        );
+
+    }
 
     throw new Error(
-      data.detail ||
-      "Order could not be completed."
+      errorMessage
     );
 
   }
@@ -1140,7 +1157,7 @@ async function submitDatabaseOrder(customer){
    WHATSAPP ORDER MESSAGE
    ========================================================== */
 
-function buildMessage(customer){
+function buildMessage(customer) {
 
   let m =
     `Hello Lifestyle Wear!%0A%0A` +
@@ -1148,7 +1165,7 @@ function buildMessage(customer){
     `--------------------%0A`;
 
 
-  cart.forEach((x,i) => {
+  cart.forEach((x, i) => {
 
     const p =
       PRODUCTS.find(
@@ -1156,10 +1173,10 @@ function buildMessage(customer){
       );
 
 
-    if(p){
+    if (p) {
 
       m +=
-        `${i+1}. ` +
+        `${i + 1}. ` +
         `${encodeURIComponent(p.name)}` +
         `%0A`;
 
@@ -1218,7 +1235,7 @@ function buildMessage(customer){
     `${encodeURIComponent(customer.address)}`;
 
 
-  if(customer.note){
+  if (customer.note) {
 
     m +=
       `%0ANote: ` +
@@ -1246,7 +1263,7 @@ $("checkoutForm")
 
       /* BAG EMPTY CHECK */
 
-      if(!cart.length){
+      if (!cart.length) {
 
         alert(
           "Your bag is empty."
@@ -1259,7 +1276,7 @@ $("checkoutForm")
 
       /* LIVE STOCK CHECK */
 
-      if(!stockReady){
+      if (!stockReady) {
 
         alert(
           "Live stock is still loading. Please wait a moment and try again."
@@ -1274,13 +1291,13 @@ $("checkoutForm")
 
       await loadDatabaseStock();
 
-      if(!stockReady)
+      if (!stockReady)
         return;
 
 
       /* CHECK STOCK ONE MORE TIME */
 
-      for(const item of cart){
+      for (const item of cart) {
 
         const product =
           PRODUCTS.find(
@@ -1288,11 +1305,11 @@ $("checkoutForm")
           );
 
 
-        if(!product)
+        if (!product)
           continue;
 
 
-        if(item.qty > product.stock){
+        if (item.qty > product.stock) {
 
           alert(
             `${product.name} does not have enough stock. Only ${product.stock} available.`
@@ -1342,7 +1359,7 @@ $("checkoutForm")
 
       /* SEND ORDER TO ONLINE DATABASE */
 
-      try{
+      try {
 
         await submitDatabaseOrder(
           customer
@@ -1388,7 +1405,7 @@ $("checkoutForm")
         loadDatabaseStock();
 
 
-      }catch(error){
+      } catch (error) {
 
         console.error(
           "Order error:",
@@ -1443,11 +1460,11 @@ $("clearCart")
     "click",
     () => {
 
-      if(
+      if (
         confirm(
           "Clear your bag?"
         )
-      ){
+      ) {
 
         cart = [];
 
@@ -1466,7 +1483,7 @@ $("checkoutBtn")
     "click",
     () => {
 
-      if(!cart.length){
+      if (!cart.length) {
 
         alert(
           "Add a product to your bag first."
@@ -1529,7 +1546,7 @@ $("closeSearch")
         .remove("active");
 
 
-      if($("searchInput"))
+      if ($("searchInput"))
         $("searchInput").value = "";
 
 
@@ -1560,7 +1577,7 @@ $("searchInput")
    MOBILE MENU
    ========================================================== */
 
-function openMenu(){
+function openMenu() {
 
   $("mobilePanel")
     ?.classList
@@ -1574,18 +1591,18 @@ function openMenu(){
 }
 
 
-function closeMenu(){
+function closeMenu() {
 
   $("mobilePanel")
     ?.classList
     .remove("open");
 
 
-  if(
+  if (
     !$("cart")
       ?.classList
       .contains("open")
-  ){
+  ) {
 
     $("screen")
       ?.classList
@@ -1626,10 +1643,10 @@ $("productOverlay")
     "click",
     e => {
 
-      if(
+      if (
         e.target ===
         $("productOverlay")
-      ){
+      ) {
 
         closeProductDetail();
 
@@ -1644,10 +1661,10 @@ $("detailAdd")
     "click",
     () => {
 
-      if(
+      if (
         quickProduct &&
         quickProduct.stock > 0
-      ){
+      ) {
 
         add(
           quickProduct.id
@@ -1669,11 +1686,11 @@ window.addEventListener(
   "popstate",
   () => {
 
-    if(
+    if (
       $("productOverlay")
         ?.classList
         .contains("show")
-    ){
+    ) {
 
       closeProductDetail();
 
@@ -1693,14 +1710,14 @@ const params =
   );
 
 
-if(
+if (
   params.get("category") &&
   CATEGORIES.some(
     c =>
       c.name ===
       params.get("category")
   )
-){
+) {
 
   selectedCategory =
     params.get("category");
