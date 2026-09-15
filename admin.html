@@ -1,44 +1,1536 @@
 <!doctype html>
+
 <html lang="en">
+
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Lifestyle Wear — Stock Admin</title>
-<style>
-body{font-family:Arial,sans-serif;background:#f5f1e9;color:#11110f;margin:0;padding:30px}.wrap{max-width:900px;margin:auto}.card{background:#fff;padding:24px;margin:16px 0;border:1px solid #ded9cf;border-radius:12px}input,button{padding:12px;border:1px solid #ccc;border-radius:8px}input{width:100%;box-sizing:border-box}button{cursor:pointer;background:#111;color:#fff}.row{display:grid;grid-template-columns:1fr 120px 120px;gap:10px;align-items:center;border-top:1px solid #eee;padding:14px 0}.muted{color:#777}@media(max-width:650px){.row{grid-template-columns:1fr}.row input{width:100%}}
-</style>
+
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Lifestyle Wear — Stock Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0d0d0c;
+            --panel: #151513;
+            --panel2: #1c1c19;
+            --cream: #f5f1e9;
+            --gold: #c9a45c;
+            --gold-light: #e3c47e;
+            --text: #f5f1e9;
+            --muted: #99968e;
+            --border: #2c2c28;
+            --danger: #d96b63;
+            --success: #72b987;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at top right, #272217 0, transparent 32%),
+                var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .logo {
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        /* ==========================================================
+   HEADER
+   ========================================================== */
+
+        .header {
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: rgba(13, 13, 12, .94);
+            backdrop-filter: blur(14px);
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 44px;
+            height: 44px;
+            border: 1px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: var(--gold-light);
+        }
+
+        .brand-text strong {
+            display: block;
+            font-size: 15px;
+            letter-spacing: 2px;
+        }
+
+        .brand-text span {
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: var(--cream);
+            border: 1px solid var(--border);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: .2s;
+        }
+
+        .back-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+
+
+        /* ==========================================================
+   MAIN
+   ========================================================== */
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 42px 24px 70px;
+        }
+
+        .hero {
+            margin-bottom: 30px;
+        }
+
+        .eyebrow {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-family: Georgia, serif;
+            font-size: 42px;
+            font-weight: 400;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            max-width: 620px;
+            line-height: 1.7;
+            margin: 12px 0 0;
+        }
+
+
+        /* ==========================================================
+   CONNECTION PANEL
+   ========================================================== */
+
+        .connection {
+            background: linear-gradient(145deg, #191917, #11110f);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 26px;
+        }
+
+        .connection-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 22px;
+        }
+
+        .connection-title {
+            font-size: 13px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #777;
+        }
+
+        .status.online .status-dot {
+            background: var(--success);
+            box-shadow: 0 0 10px rgba(114, 185, 135, .6);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr auto;
+            gap: 12px;
+        }
+
+        .field label {
+            display: block;
+            color: var(--muted);
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            border: 1px solid var(--border);
+            background: #0e0e0d;
+            color: var(--cream);
+            padding: 13px 14px;
+            border-radius: 9px;
+            outline: none;
+            font-size: 13px;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--gold);
+        }
+
+        .load-btn {
+            align-self: end;
+            border: 0;
+            background: var(--gold);
+            color: #111;
+            font-weight: bold;
+            padding: 13px 20px;
+            border-radius: 9px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .load-btn:hover {
+            background: var(--gold-light);
+        }
+
+
+        /* ==========================================================
+   STATS
+   ========================================================== */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 26px;
+        }
+
+        .stat {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 22px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stat-number {
+            margin-top: 10px;
+            font-family: Georgia, serif;
+            font-size: 32px;
+            color: var(--cream);
+        }
+
+        .stat.gold .stat-number {
+            color: var(--gold-light);
+        }
+
+
+        /* ==========================================================
+   TOOLBAR
+   ========================================================== */
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 16px;
+        }
+
+        .search {
+            max-width: 420px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 7px;
+        }
+
+        .filter {
+            background: transparent;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            padding: 9px 13px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .filter.active,
+        .filter:hover {
+            color: var(--gold-light);
+            border-color: var(--gold);
+        }
+
+
+        /* ==========================================================
+   PRODUCTS
+   ========================================================== */
+
+        .products {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .product {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 90px 1fr;
+            gap: 15px;
+            transition: .2s;
+        }
+
+        .product:hover {
+            border-color: #48443a;
+            transform: translateY(-2px);
+        }
+
+        .product-image {
+            width: 90px;
+            height: 110px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #222;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-info {
+            min-width: 0;
+        }
+
+        .product-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .product-name {
+            margin: 0;
+            font-size: 15px;
+            line-height: 1.3;
+        }
+
+        .product-id {
+            color: var(--muted);
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .stock-badge {
+            white-space: nowrap;
+            font-size: 9px;
+            letter-spacing: 1px;
+            padding: 5px 7px;
+            border-radius: 5px;
+            background: #20201d;
+            color: var(--gold-light);
+            height: max-content;
+        }
+
+        .stock-badge.low {
+            color: #e0ad64;
+        }
+
+        .stock-badge.out {
+            color: var(--danger);
+        }
+
+        .current {
+            margin-top: 14px;
+            display: flex;
+            align-items: end;
+            gap: 8px;
+        }
+
+        .current-number {
+            font-family: Georgia, serif;
+            font-size: 25px;
+        }
+
+        .current-label {
+            color: var(--muted);
+            font-size: 10px;
+            padding-bottom: 4px;
+        }
+
+        .controls {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+        }
+
+        .stock-input {
+            min-width: 0;
+        }
+
+        .save-btn {
+            border: 0;
+            background: var(--cream);
+            color: #111;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .save-btn:hover {
+            background: var(--gold-light);
+        }
+
+        .quick {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+        }
+
+        .quick button {
+            flex: 1;
+            background: #11110f;
+            color: var(--muted);
+            border: 1px solid var(--border);
+            padding: 7px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .quick button:hover {
+            color: var(--gold-light);
+            border-color: var(--gold);
+        }
+
+
+        /* ==========================================================
+   EMPTY / LOADING
+   ========================================================== */
+
+        .message {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--muted);
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+        }
+
+
+        /* ==========================================================
+   TOAST
+   ========================================================== */
+
+        .toast {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 100;
+            background: #f5f1e9;
+            color: #111;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 12px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .toast.error {
+            background: #d96b63;
+            color: #fff;
+        }
+
+
+        /* ==========================================================
+   FOOTER
+   ========================================================== */
+
+        .footer {
+            text-align: center;
+            color: #66635d;
+            font-size: 10px;
+            letter-spacing: 1px;
+            margin-top: 40px;
+        }
+
+
+        /* ==========================================================
+   MOBILE
+   ========================================================== */
+
+        @media(max-width:850px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .load-btn {
+                width: 100%;
+            }
+
+            .products {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search {
+                max-width: none;
+            }
+
+            .filters {
+                overflow-x: auto;
+            }
+
+        }
+
+
+        @media(max-width:600px) {
+
+            .header-inner {
+                padding: 14px 16px;
+            }
+
+            .container {
+                padding: 30px 16px 50px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .product {
+                grid-template-columns: 70px 1fr;
+            }
+
+            .product-image {
+                width: 70px;
+                height: 90px;
+            }
+
+            .product-top {
+                flex-direction: column;
+                gap: 6px;
+            }
+
+            .stock-badge {
+                width: max-content;
+            }
+
+            .controls {
+                grid-template-columns: 1fr;
+            }
+
+            .save-btn {
+                width: 100%;
+            }
+
+            .quick button {
+                padding: 9px 5px;
+            }
+
+        }
+    </style>
+
 </head>
+
+
 <body>
-<div class="wrap">
-<h1>Lifestyle Wear — Stock Admin</h1>
-<p class="muted">This page changes the stock in the database. Keep the admin key private.</p>
-<div class="card">
-<label>Backend URL</label><br><input id="api" value="https://lifestyle-wear-bd.onrender.com"><br><br>
-<label>Admin key</label><br><input id="key" type="password" placeholder="Your LW_ADMIN_KEY"><br><br>
-<button onclick="loadProducts()">Load products</button>
-</div>
-<div class="card" id="products">Enter the backend URL and admin key, then load products.</div>
-</div>
-<script>
-async function loadProducts(){
- const api=document.getElementById('api').value.replace(/\/$/,'');
- try{
-  const r=await fetch(api+'/api/products');
-  const data=await r.json();
-  document.getElementById('products').innerHTML=data.map(p=>`<div class="row"><div><b>${esc(p.name)}</b><div class="muted">ID: ${p.id} · Current stock: ${p.stock}</div></div><input id="s-${p.id}" type="number" min="0" value="${p.stock}"><button onclick="saveStock(${p.id})">Save</button></div>`).join('');
- }catch(e){document.getElementById('products').textContent='Could not connect to backend: '+e.message;}
-}
-async function saveStock(id){
- const api=document.getElementById('api').value.replace(/\/$/,'');
- const key=document.getElementById('key').value;
- const stock=Number(document.getElementById('s-'+id).value);
- const r=await fetch(api+'/api/admin/products/'+id+'/stock',{method:'PUT',headers:{'Content-Type':'application/json','X-Admin-Key':key},body:JSON.stringify({stock})});
- const data=await r.json();
- if(!r.ok){alert(data.detail||'Failed');return;}
- alert(data.name+' stock updated to '+data.stock);
- loadProducts();
-}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
-</script>
+
+
+    <!-- ==========================================================
+     HEADER
+     ========================================================== -->
+
+    <header class="header">
+
+        <div class="header-inner">
+
+            <div class="brand">
+
+                <div class="logo">
+                    <img src="images/Logo.png" alt="Lifestyle Wear Logo">
+                </div>
+
+                <div class="brand-text">
+
+                    <strong>LIFESTYLE WEAR</strong>
+
+                    <span>STOCK CONTROL CENTER</span>
+
+                </div>
+
+            </div>
+
+
+            <a class="back-btn" href="index.html">
+                ← Back to Store
+            </a>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- ==========================================================
+     MAIN
+     ========================================================== -->
+
+    <main class="container">
+
+
+        <section class="hero">
+
+            <div class="eyebrow">
+                Admin Dashboard
+            </div>
+
+            <h1>
+                Stock Management
+            </h1>
+
+            <p>
+                Manage your Lifestyle Wear inventory from one central
+                database. Changes made here are reflected across the
+                store automatically.
+            </p>
+
+        </section>
+
+
+
+        <!-- ========================================================
+       CONNECTION
+       ======================================================== -->
+
+        <section class="connection">
+
+            <div class="connection-top">
+
+                <div class="connection-title">
+                    DATABASE CONNECTION
+                </div>
+
+                <div class="status" id="status">
+
+                    <span class="status-dot"></span>
+
+                    <span id="statusText">
+                        Not connected
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-grid">
+
+
+                <div class="field">
+
+                    <label>
+                        Backend URL
+                    </label>
+
+                    <input id="api" value="https://lifestyle-wear-bd.onrender.com">
+
+                </div>
+
+
+                <div class="field">
+
+                    <label>
+                        Admin Key
+                    </label>
+
+                    <input id="key" type="password" placeholder="Your LW_ADMIN_KEY">
+
+                </div>
+
+
+                <button class="load-btn" onclick="loadProducts()">
+                    Load Products
+                </button>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================================
+       STATS
+       ======================================================== -->
+
+        <section class="stats">
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Total Products
+                </div>
+
+                <div class="stat-number" id="totalProducts">
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat gold">
+
+                <div class="stat-label">
+                    Total Stock
+                </div>
+
+                <div class="stat-number" id="totalStock">
+                    —
+                </div>
+
+            </div>
+
+
+            <div class="stat">
+
+                <div class="stat-label">
+                    Stock Out
+                </div>
+
+                <div class="stat-number" id="stockOut">
+                    —
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ========================================================
+       TOOLBAR
+       ======================================================== -->
+
+        <div class="toolbar">
+
+            <input class="search" id="search" placeholder="Search products..." oninput="renderProducts()">
+
+
+            <div class="filters">
+
+                <button class="filter active" data-filter="all" onclick="setFilter('all',this)">
+                    ALL
+                </button>
+
+                <button class="filter" data-filter="in" onclick="setFilter('in',this)">
+                    IN STOCK
+                </button>
+
+                <button class="filter" data-filter="low" onclick="setFilter('low',this)">
+                    LOW
+                </button>
+
+                <button class="filter" data-filter="out" onclick="setFilter('out',this)">
+                    STOCK OUT
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ========================================================
+       PRODUCTS
+       ======================================================== -->
+
+        <section class="products" id="products">
+
+            <div class="message">
+
+                Enter your backend URL and admin key,
+                then click <b>Load Products</b>.
+
+            </div>
+
+        </section>
+
+
+
+        <div class="footer" id="lastUpdated">
+            LIFESTYLE WEAR • YOUR TRUST, OUR STANDARD
+        </div>
+
+
+    </main>
+
+
+
+    <div class="toast" id="toast">
+    </div>
+
+
+
+    <script>
+
+
+        /* ==========================================================
+           VARIABLES
+           ========================================================== */
+
+        let productData = [];
+
+        let currentFilter = "all";
+
+
+
+        /* ==========================================================
+           HELPERS
+           ========================================================== */
+
+        function apiUrl() {
+
+            return document
+                .getElementById("api")
+                .value
+                .replace(/\/$/, "");
+
+        }
+
+
+        function showToast(message, error = false) {
+
+            const toast =
+                document.getElementById("toast");
+
+            toast.textContent = message;
+
+            toast.classList.toggle(
+                "error",
+                error
+            );
+
+            toast.classList.add("show");
+
+            setTimeout(
+                () => {
+                    toast.classList.remove("show");
+                },
+                3000
+            );
+
+        }
+
+
+        function setStatus(online, text) {
+
+            const status =
+                document.getElementById("status");
+
+            const statusText =
+                document.getElementById("statusText");
+
+            status.classList.toggle(
+                "online",
+                online
+            );
+
+            statusText.textContent =
+                text;
+
+        }
+
+
+
+        /* ==========================================================
+           LOAD PRODUCTS
+           ========================================================== */
+
+        async function loadProducts() {
+
+            const products =
+                document.getElementById("products");
+
+            products.innerHTML = `
+    <div class="message">
+      Loading products...
+    </div>
+  `;
+
+
+            try {
+
+                const r =
+                    await fetch(
+                        apiUrl() + "/api/products"
+                    );
+
+
+                const data =
+                    await r.json();
+
+
+                if (!r.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Could not load products."
+                    );
+
+                }
+
+
+                productData = data;
+
+
+                setStatus(
+                    true,
+                    "Database connected"
+                );
+
+
+                updateStats();
+
+                renderProducts();
+
+
+                document.getElementById(
+                    "lastUpdated"
+                ).textContent =
+                    "Last synced: " +
+                    new Date().toLocaleTimeString() +
+                    " • LIFESTYLE WEAR";
+
+
+            } catch (e) {
+
+                setStatus(
+                    false,
+                    "Connection failed"
+                );
+
+
+                products.innerHTML = `
+      <div class="message">
+        Could not connect to backend.<br><br>
+        ${esc(e.message)}
+      </div>
+    `;
+
+                showToast(
+                    "Could not connect to backend.",
+                    true
+                );
+
+            }
+
+        }
+
+
+
+        /* ==========================================================
+           UPDATE STATS
+           ========================================================== */
+
+        function updateStats() {
+
+            const total =
+                productData.length;
+
+
+            const stock =
+                productData.reduce(
+                    (sum, p) =>
+                        sum + Number(p.stock),
+                    0
+                );
+
+
+            const out =
+                productData.filter(
+                    p => Number(p.stock) <= 0
+                ).length;
+
+
+            document.getElementById(
+                "totalProducts"
+            ).textContent = total;
+
+
+            document.getElementById(
+                "totalStock"
+            ).textContent = stock;
+
+
+            document.getElementById(
+                "stockOut"
+            ).textContent = out;
+
+        }
+
+
+
+        /* ==========================================================
+           FILTER
+           ========================================================== */
+
+        function setFilter(filter, button) {
+
+            currentFilter = filter;
+
+
+            document
+                .querySelectorAll(".filter")
+                .forEach(
+                    b => b.classList.remove("active")
+                );
+
+
+            button.classList.add("active");
+
+
+            renderProducts();
+
+        }
+
+
+
+        /* ==========================================================
+           RENDER PRODUCTS
+           ========================================================== */
+
+        function renderProducts() {
+
+            const container =
+                document.getElementById("products");
+
+
+            const search =
+                document.getElementById("search")
+                    .value
+                    .toLowerCase()
+                    .trim();
+
+
+            const filtered =
+                productData.filter(p => {
+
+
+                    const matchesSearch =
+                        p.name
+                            .toLowerCase()
+                            .includes(search);
+
+
+                    const stock =
+                        Number(p.stock);
+
+
+                    let matchesFilter = true;
+
+
+                    if (currentFilter === "in") {
+
+                        matchesFilter =
+                            stock > 0;
+
+                    }
+
+
+                    if (currentFilter === "low") {
+
+                        matchesFilter =
+                            stock > 0 &&
+                            stock <= 5;
+
+                    }
+
+
+                    if (currentFilter === "out") {
+
+                        matchesFilter =
+                            stock <= 0;
+
+                    }
+
+
+                    return (
+                        matchesSearch &&
+                        matchesFilter
+                    );
+
+                });
+
+
+            if (!filtered.length) {
+
+                container.innerHTML = `
+      <div class="message">
+        No products found.
+      </div>
+    `;
+
+                return;
+
+            }
+
+
+            container.innerHTML =
+                filtered.map(
+                    p => productCard(p)
+                ).join("");
+
+        }
+
+
+
+        /* ==========================================================
+           PRODUCT CARD
+           ========================================================== */
+
+        function productCard(p) {
+
+            const stock =
+                Number(p.stock);
+
+
+            let badgeClass = "";
+
+            let badgeText =
+                "IN STOCK";
+
+
+            if (stock <= 0) {
+
+                badgeClass = "out";
+
+                badgeText = "STOCK OUT";
+
+            }
+            else if (stock <= 5) {
+
+                badgeClass = "low";
+
+                badgeText = "LOW STOCK";
+
+            }
+
+
+            const image =
+                p.image ||
+                "images/placeholder.jpg";
+
+
+            return `
+
+    <article class="product">
+
+
+      <div class="product-image">
+
+        <img
+          src="${esc(image)}"
+          alt="${esc(p.name)}"
+          onerror="this.style.display='none'"
+        >
+
+      </div>
+
+
+      <div class="product-info">
+
+
+        <div class="product-top">
+
+          <div>
+
+            <h3 class="product-name">
+              ${esc(p.name)}
+            </h3>
+
+            <div class="product-id">
+              PRODUCT ID: LW-${String(p.id).padStart(3, "0")}
+            </div>
+
+          </div>
+
+
+          <span
+            class="stock-badge ${badgeClass}"
+          >
+            ${badgeText}
+          </span>
+
+        </div>
+
+
+        <div class="current">
+
+          <span class="current-number">
+            ${stock}
+          </span>
+
+          <span class="current-label">
+            CURRENT STOCK
+          </span>
+
+        </div>
+
+
+        <div class="controls">
+
+          <input
+            class="stock-input"
+            id="s-${p.id}"
+            type="number"
+            min="0"
+            value="${stock}"
+          >
+
+
+          <button
+            class="save-btn"
+            onclick="saveStock(${p.id})"
+          >
+            UPDATE
+          </button>
+
+        </div>
+
+
+        <div class="quick">
+
+          <button
+            onclick="quickStock(${p.id},5)"
+          >
+            +5
+          </button>
+
+          <button
+            onclick="quickStock(${p.id},10)"
+          >
+            +10
+          </button>
+
+          <button
+            onclick="quickStock(${p.id},20)"
+          >
+            +20
+          </button>
+
+          <button
+            onclick="quickStock(${p.id},50)"
+          >
+            +50
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </article>
+
+  `;
+
+        }
+
+
+
+        /* ==========================================================
+           QUICK RESTOCK
+           ========================================================== */
+
+        function quickStock(id, amount) {
+
+            const input =
+                document.getElementById(
+                    "s-" + id
+                );
+
+
+            if (!input)
+                return;
+
+
+            const current =
+                Number(input.value) || 0;
+
+
+            input.value =
+                current + amount;
+
+        }
+
+
+
+        /* ==========================================================
+           SAVE STOCK
+           ========================================================== */
+
+        async function saveStock(id) {
+
+            const key =
+                document.getElementById(
+                    "key"
+                ).value;
+
+
+            if (!key) {
+
+                showToast(
+                    "Enter your Admin Key first.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const input =
+                document.getElementById(
+                    "s-" + id
+                );
+
+
+            const stock =
+                Number(input.value);
+
+
+            if (!Number.isInteger(stock) || stock < 0) {
+
+                showToast(
+                    "Stock must be a whole number.",
+                    true
+                );
+
+                return;
+
+            }
+
+
+            const button =
+                input
+                    .closest(".product")
+                    .querySelector(".save-btn");
+
+
+            button.disabled = true;
+
+            button.textContent =
+                "SAVING...";
+
+
+            try {
+
+                const r =
+                    await fetch(
+                        apiUrl() +
+                        "/api/admin/products/" +
+                        id +
+                        "/stock",
+                        {
+
+                            method: "PUT",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+
+                                "X-Admin-Key":
+                                    key
+
+                            },
+
+                            body: JSON.stringify({
+                                stock: stock
+                            })
+
+                        }
+                    );
+
+
+                const data =
+                    await r.json();
+
+
+                if (!r.ok) {
+
+                    throw new Error(
+                        data.detail ||
+                        "Failed to update stock."
+                    );
+
+                }
+
+
+                showToast(
+                    data.name +
+                    " stock updated to " +
+                    data.stock
+                );
+
+
+                /* Reload from central database */
+
+                await loadProducts();
+
+
+            } catch (e) {
+
+                if (
+                    e.message
+                        .toLowerCase()
+                        .includes("admin key")
+                ) {
+
+                    showToast(
+                        "Invalid Admin Key.",
+                        true
+                    );
+
+                } else {
+
+                    showToast(
+                        e.message,
+                        true
+                    );
+
+                }
+
+            } finally {
+
+                button.disabled = false;
+
+                button.textContent =
+                    "UPDATE";
+
+            }
+
+        }
+
+
+
+        /* ==========================================================
+           ESCAPE HTML
+           ========================================================== */
+
+        function esc(s) {
+
+            return String(s)
+                .replace(
+                    /[&<>"']/g,
+                    m => ({
+                        "&": "&amp;",
+                        "<": "&lt;",
+                        ">": "&gt;",
+                        '"': "&quot;",
+                        "'": "&#039;"
+                    }[m])
+                );
+
+        }
+
+
+    </script>
+
 </body>
+
 </html>
