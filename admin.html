@@ -1,1536 +1,1937 @@
 <!doctype html>
-
 <html lang="en">
-
 <head>
-
-    <meta charset="utf-8">
-
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-
-    <title>Lifestyle Wear — Stock Dashboard</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg: #0d0d0c;
-            --panel: #151513;
-            --panel2: #1c1c19;
-            --cream: #f5f1e9;
-            --gold: #c9a45c;
-            --gold-light: #e3c47e;
-            --text: #f5f1e9;
-            --muted: #99968e;
-            --border: #2c2c28;
-            --danger: #d96b63;
-            --success: #72b987;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background:
-                radial-gradient(circle at top right, #272217 0, transparent 32%),
-                var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-        }
-
-        .logo {
-            width: 52px;
-            height: 52px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            display: block;
-        }
-
-        /* ==========================================================
-   HEADER
-   ========================================================== */
-
-        .header {
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            z-index: 20;
-            background: rgba(13, 13, 12, .94);
-            backdrop-filter: blur(14px);
-        }
-
-        .header-inner {
-            max-width: 1200px;
-            margin: auto;
-            padding: 18px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .logo {
-            width: 44px;
-            height: 44px;
-            border: 1px solid var(--gold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 15px;
-            font-weight: bold;
-            letter-spacing: 2px;
-            color: var(--gold-light);
-        }
-
-        .brand-text strong {
-            display: block;
-            font-size: 15px;
-            letter-spacing: 2px;
-        }
-
-        .brand-text span {
-            color: var(--muted);
-            font-size: 10px;
-            letter-spacing: 2px;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: var(--cream);
-            border: 1px solid var(--border);
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 12px;
-            transition: .2s;
-        }
-
-        .back-btn:hover {
-            border-color: var(--gold);
-            color: var(--gold-light);
-        }
-
-
-        /* ==========================================================
-   MAIN
-   ========================================================== */
-
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 42px 24px 70px;
-        }
-
-        .hero {
-            margin-bottom: 30px;
-        }
-
-        .eyebrow {
-            color: var(--gold);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            margin: 0;
-            font-family: Georgia, serif;
-            font-size: 42px;
-            font-weight: 400;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            color: var(--muted);
-            max-width: 620px;
-            line-height: 1.7;
-            margin: 12px 0 0;
-        }
-
-
-        /* ==========================================================
-   CONNECTION PANEL
-   ========================================================== */
-
-        .connection {
-            background: linear-gradient(145deg, #191917, #11110f);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 26px;
-        }
-
-        .connection-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 22px;
-        }
-
-        .connection-title {
-            font-size: 13px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--muted);
-            font-size: 11px;
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #777;
-        }
-
-        .status.online .status-dot {
-            background: var(--success);
-            box-shadow: 0 0 10px rgba(114, 185, 135, .6);
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr auto;
-            gap: 12px;
-        }
-
-        .field label {
-            display: block;
-            color: var(--muted);
-            font-size: 10px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-        }
-
-        input,
-        select {
-            width: 100%;
-            border: 1px solid var(--border);
-            background: #0e0e0d;
-            color: var(--cream);
-            padding: 13px 14px;
-            border-radius: 9px;
-            outline: none;
-            font-size: 13px;
-        }
-
-        input:focus,
-        select:focus {
-            border-color: var(--gold);
-        }
-
-        .load-btn {
-            align-self: end;
-            border: 0;
-            background: var(--gold);
-            color: #111;
-            font-weight: bold;
-            padding: 13px 20px;
-            border-radius: 9px;
-            cursor: pointer;
-            transition: .2s;
-        }
-
-        .load-btn:hover {
-            background: var(--gold-light);
-        }
-
-
-        /* ==========================================================
-   STATS
-   ========================================================== */
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 14px;
-            margin-bottom: 26px;
-        }
-
-        .stat {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 22px;
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .stat-number {
-            margin-top: 10px;
-            font-family: Georgia, serif;
-            font-size: 32px;
-            color: var(--cream);
-        }
-
-        .stat.gold .stat-number {
-            color: var(--gold-light);
-        }
-
-
-        /* ==========================================================
-   TOOLBAR
-   ========================================================== */
-
-        .toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 16px;
-        }
-
-        .search {
-            max-width: 420px;
-        }
-
-        .filters {
-            display: flex;
-            gap: 7px;
-        }
-
-        .filter {
-            background: transparent;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            padding: 9px 13px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 11px;
-        }
-
-        .filter.active,
-        .filter:hover {
-            color: var(--gold-light);
-            border-color: var(--gold);
-        }
-
-
-        /* ==========================================================
-   PRODUCTS
-   ========================================================== */
-
-        .products {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 14px;
-        }
-
-        .product {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 15px;
-            display: grid;
-            grid-template-columns: 90px 1fr;
-            gap: 15px;
-            transition: .2s;
-        }
-
-        .product:hover {
-            border-color: #48443a;
-            transform: translateY(-2px);
-        }
-
-        .product-image {
-            width: 90px;
-            height: 110px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #222;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-info {
-            min-width: 0;
-        }
-
-        .product-top {
-            display: flex;
-            justify-content: space-between;
-            gap: 10px;
-        }
-
-        .product-name {
-            margin: 0;
-            font-size: 15px;
-            line-height: 1.3;
-        }
-
-        .product-id {
-            color: var(--muted);
-            font-size: 10px;
-            margin-top: 5px;
-        }
-
-        .stock-badge {
-            white-space: nowrap;
-            font-size: 9px;
-            letter-spacing: 1px;
-            padding: 5px 7px;
-            border-radius: 5px;
-            background: #20201d;
-            color: var(--gold-light);
-            height: max-content;
-        }
-
-        .stock-badge.low {
-            color: #e0ad64;
-        }
-
-        .stock-badge.out {
-            color: var(--danger);
-        }
-
-        .current {
-            margin-top: 14px;
-            display: flex;
-            align-items: end;
-            gap: 8px;
-        }
-
-        .current-number {
-            font-family: Georgia, serif;
-            font-size: 25px;
-        }
-
-        .current-label {
-            color: var(--muted);
-            font-size: 10px;
-            padding-bottom: 4px;
-        }
-
-        .controls {
-            margin-top: 12px;
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 8px;
-        }
-
-        .stock-input {
-            min-width: 0;
-        }
-
-        .save-btn {
-            border: 0;
-            background: var(--cream);
-            color: #111;
-            padding: 11px 17px;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .save-btn:hover {
-            background: var(--gold-light);
-        }
-
-        .quick {
-            display: flex;
-            gap: 5px;
-            margin-top: 8px;
-        }
-
-        .quick button {
-            flex: 1;
-            background: #11110f;
-            color: var(--muted);
-            border: 1px solid var(--border);
-            padding: 7px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 10px;
-        }
-
-        .quick button:hover {
-            color: var(--gold-light);
-            border-color: var(--gold);
-        }
-
-
-        /* ==========================================================
-   EMPTY / LOADING
-   ========================================================== */
-
-        .message {
-            grid-column: 1/-1;
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--muted);
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-        }
-
-
-        /* ==========================================================
-   TOAST
-   ========================================================== */
-
-        .toast {
-            position: fixed;
-            right: 22px;
-            bottom: 22px;
-            z-index: 100;
-            background: #f5f1e9;
-            color: #111;
-            padding: 14px 18px;
-            border-radius: 10px;
-            font-size: 12px;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, .35);
-            transform: translateY(100px);
-            opacity: 0;
-            pointer-events: none;
-            transition: .3s;
-        }
-
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .toast.error {
-            background: #d96b63;
-            color: #fff;
-        }
-
-
-        /* ==========================================================
-   FOOTER
-   ========================================================== */
-
-        .footer {
-            text-align: center;
-            color: #66635d;
-            font-size: 10px;
-            letter-spacing: 1px;
-            margin-top: 40px;
-        }
-
-
-        /* ==========================================================
-   MOBILE
-   ========================================================== */
-
-        @media(max-width:850px) {
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .load-btn {
-                width: 100%;
-            }
-
-            .products {
-                grid-template-columns: 1fr;
-            }
-
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .search {
-                max-width: none;
-            }
-
-            .filters {
-                overflow-x: auto;
-            }
-
-        }
-
-
-        @media(max-width:600px) {
-
-            .header-inner {
-                padding: 14px 16px;
-            }
-
-            .container {
-                padding: 30px 16px 50px;
-            }
-
-            h1 {
-                font-size: 32px;
-            }
-
-            .stats {
-                grid-template-columns: 1fr;
-            }
-
-            .product {
-                grid-template-columns: 70px 1fr;
-            }
-
-            .product-image {
-                width: 70px;
-                height: 90px;
-            }
-
-            .product-top {
-                flex-direction: column;
-                gap: 6px;
-            }
-
-            .stock-badge {
-                width: max-content;
-            }
-
-            .controls {
-                grid-template-columns: 1fr;
-            }
-
-            .save-btn {
-                width: 100%;
-            }
-
-            .quick button {
-                padding: 9px 5px;
-            }
-
-        }
-    </style>
-
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0b0b0a">
+
+<title>Lifestyle Wear — Stock Dashboard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+:root{
+  --bg:#0b0b0a;
+  --panel:#121211;
+  --panel2:#181816;
+  --text:#f5f1e9;
+  --muted:#8e8b84;
+  --gold:#c9a45c;
+  --gold2:#ead08b;
+  --border:#292925;
+  --green:#70bb89;
+  --orange:#dfa45d;
+  --red:#db7068;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    radial-gradient(
+      circle at 90% 0%,
+      rgba(201,164,92,.11),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 0% 35%,
+      rgba(255,255,255,.025),
+      transparent 24%
+    ),
+    var(--bg);
+}
+
+button,
+input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:50;
+  border-bottom:1px solid rgba(255,255,255,.07);
+  background:rgba(11,11,10,.88);
+  backdrop-filter:blur(18px);
+}
+
+.header-inner{
+  width:min(1400px,100%);
+  margin:auto;
+  padding:14px clamp(15px,3vw,35px);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:0;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(201,164,92,.65);
+  border-radius:12px;
+  overflow:hidden;
+  flex:none;
+  background:#111;
+}
+
+.logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+.brand-text strong{
+  display:block;
+  font-size:14px;
+  letter-spacing:2.5px;
+  white-space:nowrap;
+}
+
+.brand-text span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:2px;
+  margin-top:4px;
+}
+
+.header-actions{
+  display:flex;
+  gap:8px;
+}
+
+.header-btn{
+  min-height:40px;
+  padding:0 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:#11110f;
+  color:var(--text);
+  font-size:10px;
+  text-decoration:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:.2s;
+}
+
+.header-btn:hover{
+  border-color:var(--gold);
+  color:var(--gold2);
+}
+
+.container{
+  width:min(1400px,100%);
+  margin:auto;
+  padding:
+    clamp(28px,5vw,60px)
+    clamp(15px,3vw,35px)
+    70px;
+}
+
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:25px;
+  margin-bottom:30px;
+}
+
+.eyebrow{
+  color:var(--gold);
+  font-size:10px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:10px;
+}
+
+h1{
+  margin:0;
+  font-family:Georgia,serif;
+  font-weight:400;
+  font-size:clamp(32px,5vw,55px);
+  letter-spacing:-1.5px;
+}
+
+.hero p{
+  color:var(--muted);
+  line-height:1.7;
+  max-width:650px;
+  margin:13px 0 0;
+  font-size:13px;
+}
+
+.hero-mark{
+  color:#34332e;
+  font-family:Georgia,serif;
+  font-size:72px;
+  line-height:1;
+}
+
+.connection{
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:clamp(18px,2.5vw,27px);
+  background:linear-gradient(145deg,#181816,#10100f);
+  margin-bottom:22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+}
+
+.connection-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px;
+}
+
+.section-label{
+  font-size:11px;
+  font-weight:bold;
+  letter-spacing:1.8px;
+}
+
+.status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.status-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#666;
+}
+
+.status.online .status-dot{
+  background:var(--green);
+  box-shadow:0 0 12px rgba(112,187,137,.7);
+}
+
+.status.online{
+  color:#a6d3b3;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:minmax(240px,1.5fr) minmax(180px,1fr) auto;
+  gap:12px;
+}
+
+.field label{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  margin-bottom:7px;
+}
+
+input{
+  width:100%;
+  border:1px solid var(--border);
+  background:#0d0d0c;
+  color:var(--text);
+  border-radius:10px;
+  padding:13px 14px;
+  outline:none;
+  font-size:12px;
+}
+
+input:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,164,92,.07);
+}
+
+.load-btn{
+  align-self:end;
+  border:0;
+  border-radius:10px;
+  padding:13px 20px;
+  background:var(--gold);
+  color:#111;
+  font-weight:bold;
+  font-size:11px;
+  min-height:44px;
+  transition:.2s;
+}
+
+.load-btn:hover{
+  background:var(--gold2);
+  transform:translateY(-1px);
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:28px;
+}
+
+.stat{
+  position:relative;
+  overflow:hidden;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1.7px;
+  text-transform:uppercase;
+}
+
+.stat-number{
+  font:400 31px Georgia,serif;
+  margin-top:9px;
+}
+
+.stat.gold .stat-number{
+  color:var(--gold2);
+}
+
+.stat.low .stat-number{
+  color:var(--orange);
+}
+
+.stat.out .stat-number{
+  color:var(--red);
+}
+
+.workspace-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  gap:18px;
+  margin:30px 0 14px;
+}
+
+.workspace-title h2{
+  margin:0;
+  font:400 25px Georgia,serif;
+}
+
+.workspace-title p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:11px;
+}
+
+.toolbar{
+  display:grid;
+  grid-template-columns:minmax(200px,1fr) auto;
+  gap:12px;
+  align-items:center;
+  margin-bottom:15px;
+}
+
+.search-wrap{
+  position:relative;
+}
+
+.search-icon{
+  position:absolute;
+  left:13px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#68665f;
+  pointer-events:none;
+}
+
+.search{
+  padding-left:37px;
+}
+
+.filters{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+  display:none;
+}
+
+.filter{
+  flex:none;
+  background:#11110f;
+  color:var(--muted);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:10px 12px;
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+.filter:hover,
+.filter.active{
+  color:var(--gold2);
+  border-color:var(--gold);
+  background:#171511;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:13px;
+}
+
+.product{
+  display:grid;
+  grid-template-columns:104px minmax(0,1fr);
+  gap:16px;
+  padding:14px;
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:16px;
+  transition:.2s;
+  min-width:0;
+}
+
+.product:hover{
+  border-color:#454137;
+  transform:translateY(-2px);
+}
+
+.product-image{
+  width:104px;
+  height:128px;
+  border-radius:11px;
+  overflow:hidden;
+  background:#20201d;
+  border:1px solid #2b2b27;
+}
+
+.product-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+
+.product-info{
+  min-width:0;
+}
+
+.product-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:10px;
+}
+
+.product-name{
+  margin:0;
+  font-size:14px;
+  line-height:1.35;
+  font-weight:600;
+  overflow-wrap:anywhere;
+}
+
+.product-id{
+  color:#68665f;
+  font-size:9px;
+  letter-spacing:.8px;
+  margin-top:5px;
+}
+
+.product-category{
+  color:#77746d;
+  font-size:9px;
+  margin-top:6px;
+}
+
+.stock-badge{
+  flex:none;
+  white-space:nowrap;
+  border-radius:6px;
+  padding:5px 7px;
+  background:#1e1e1b;
+  color:var(--green);
+  font-size:8px;
+  letter-spacing:.8px;
+}
+
+.stock-badge.low{
+  color:var(--orange);
+}
+
+.stock-badge.out{
+  color:var(--red);
+}
+
+.current{
+  margin-top:13px;
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+
+.current-number{
+  font:400 26px Georgia,serif;
+}
+
+.current-label{
+  color:#77746d;
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.controls{
+  margin-top:11px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:7px;
+}
+
+.stock-input{
+  padding:11px 12px;
+}
+
+.save-btn{
+  border:0;
+  background:var(--text);
+  color:#111;
+  border-radius:9px;
+  padding:0 15px;
+  font-weight:bold;
+  font-size:9px;
+  letter-spacing:.7px;
+  min-height:42px;
+  transition:.2s;
+}
+
+.save-btn:hover{
+  background:var(--gold2);
+}
+
+.save-btn:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.quick{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+  margin-top:7px;
+}
+
+.quick button{
+  border:1px solid var(--border);
+  background:#10100f;
+  color:#77746d;
+  border-radius:7px;
+  padding:7px 3px;
+  font-size:9px;
+  transition:.2s;
+}
+
+.quick button:hover{
+  border-color:var(--gold);
+  color:var(--gold2);
+}
+
+.message{
+  grid-column:1/-1;
+  text-align:center;
+  padding:70px 20px;
+  color:var(--muted);
+  background:var(--panel);
+  border:1px dashed #33322d;
+  border-radius:16px;
+  font-size:12px;
+  line-height:1.7;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:100;
+  max-width:min(380px,calc(100vw - 32px));
+  background:var(--text);
+  color:#111;
+  padding:13px 17px;
+  border-radius:11px;
+  font-size:11px;
+  box-shadow:0 18px 50px rgba(0,0,0,.4);
+  transform:translateY(120px);
+  opacity:0;
+  pointer-events:none;
+  transition:.3s;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast.error{
+  background:var(--red);
+  color:#fff;
+}
+
+.footer{
+  text-align:center;
+  color:#55534e;
+  font-size:9px;
+  letter-spacing:1.2px;
+  margin-top:42px;
+}
+
+/* TABLET */
+@media(max-width:1050px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .products{
+    grid-template-columns:1fr;
+  }
+}
+
+/* MOBILE */
+@media(max-width:720px){
+
+  .header-inner{
+    padding:12px 15px;
+  }
+
+  .logo{
+    width:43px;
+    height:43px;
+    border-radius:10px;
+  }
+
+  .brand-text strong{
+    font-size:12px;
+    letter-spacing:2px;
+  }
+
+  .brand-text span{
+    font-size:8px;
+  }
+
+  .header-btn{
+    padding:0 10px;
+    font-size:9px;
+  }
+
+  .hero{
+    align-items:flex-start;
+  }
+
+  .hero-mark{
+    display:none;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .load-btn{
+    width:100%;
+  }
+
+  .toolbar{
+    grid-template-columns:1fr;
+  }
+
+  .filters{
+    width:100%;
+  }
+
+  .workspace-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stat{
+    padding:16px;
+  }
+
+  .stat-number{
+    font-size:27px;
+  }
+
+  .product{
+    grid-template-columns:84px minmax(0,1fr);
+    gap:12px;
+    padding:11px;
+  }
+
+  .product-image{
+    width:84px;
+    height:108px;
+  }
+
+  .product-name{
+    font-size:13px;
+  }
+
+  .controls{
+    grid-template-columns:1fr;
+  }
+
+  .save-btn{
+    width:100%;
+    min-height:42px;
+  }
+}
+
+/* SMALL PHONE */
+@media(max-width:480px){
+
+  .header-actions .header-btn:first-child{
+    display:none;
+  }
+
+  .container{
+    padding-top:28px;
+  }
+
+  h1{
+    font-size:35px;
+  }
+
+  .hero p{
+    font-size:12px;
+  }
+
+  .connection{
+    border-radius:14px;
+  }
+
+  .connection-head{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .stats{
+    gap:8px;
+  }
+
+  .stat{
+    padding:14px;
+    border-radius:12px;
+  }
+
+  .stat-label{
+    font-size:8px;
+  }
+
+  .stat-number{
+    font-size:25px;
+  }
+
+  .product{
+    grid-template-columns:72px minmax(0,1fr);
+  }
+
+  .product-image{
+    width:72px;
+    height:96px;
+  }
+
+  .product-top{
+    flex-direction:column;
+    gap:7px;
+  }
+
+  .stock-badge{
+    align-self:flex-start;
+  }
+
+  .quick button{
+    min-height:34px;
+  }
+
+  .toast{
+    right:16px;
+    bottom:16px;
+  }
+}
+</style>
 </head>
-
 
 <body>
 
+<header class="header">
+  <div class="header-inner">
 
-    <!-- ==========================================================
-     HEADER
-     ========================================================== -->
+    <div class="brand">
 
-    <header class="header">
-
-        <div class="header-inner">
-
-            <div class="brand">
-
-                <div class="logo">
-                    <img src="images/Logo.png" alt="Lifestyle Wear Logo">
-                </div>
-
-                <div class="brand-text">
-
-                    <strong>LIFESTYLE WEAR</strong>
-
-                    <span>STOCK CONTROL CENTER</span>
-
-                </div>
-
-            </div>
-
-
-            <a class="back-btn" href="index.html">
-                ← Back to Store
-            </a>
-
-        </div>
-
-    </header>
-
-
-
-    <!-- ==========================================================
-     MAIN
-     ========================================================== -->
-
-    <main class="container">
-
-
-        <section class="hero">
-
-            <div class="eyebrow">
-                Admin Dashboard
-            </div>
-
-            <h1>
-                Stock Management
-            </h1>
-
-            <p>
-                Manage your Lifestyle Wear inventory from one central
-                database. Changes made here are reflected across the
-                store automatically.
-            </p>
-
-        </section>
-
-
-
-        <!-- ========================================================
-       CONNECTION
-       ======================================================== -->
-
-        <section class="connection">
-
-            <div class="connection-top">
-
-                <div class="connection-title">
-                    DATABASE CONNECTION
-                </div>
-
-                <div class="status" id="status">
-
-                    <span class="status-dot"></span>
-
-                    <span id="statusText">
-                        Not connected
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <div class="form-grid">
-
-
-                <div class="field">
-
-                    <label>
-                        Backend URL
-                    </label>
-
-                    <input id="api" value="https://lifestyle-wear-bd.onrender.com">
-
-                </div>
-
-
-                <div class="field">
-
-                    <label>
-                        Admin Key
-                    </label>
-
-                    <input id="key" type="password" placeholder="Your LW_ADMIN_KEY">
-
-                </div>
-
-
-                <button class="load-btn" onclick="loadProducts()">
-                    Load Products
-                </button>
-
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ========================================================
-       STATS
-       ======================================================== -->
-
-        <section class="stats">
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    Total Products
-                </div>
-
-                <div class="stat-number" id="totalProducts">
-                    —
-                </div>
-
-            </div>
-
-
-            <div class="stat gold">
-
-                <div class="stat-label">
-                    Total Stock
-                </div>
-
-                <div class="stat-number" id="totalStock">
-                    —
-                </div>
-
-            </div>
-
-
-            <div class="stat">
-
-                <div class="stat-label">
-                    Stock Out
-                </div>
-
-                <div class="stat-number" id="stockOut">
-                    —
-                </div>
-
-            </div>
-
-        </section>
-
-
-
-        <!-- ========================================================
-       TOOLBAR
-       ======================================================== -->
-
-        <div class="toolbar">
-
-            <input class="search" id="search" placeholder="Search products..." oninput="renderProducts()">
-
-
-            <div class="filters">
-
-                <button class="filter active" data-filter="all" onclick="setFilter('all',this)">
-                    ALL
-                </button>
-
-                <button class="filter" data-filter="in" onclick="setFilter('in',this)">
-                    IN STOCK
-                </button>
-
-                <button class="filter" data-filter="low" onclick="setFilter('low',this)">
-                    LOW
-                </button>
-
-                <button class="filter" data-filter="out" onclick="setFilter('out',this)">
-                    STOCK OUT
-                </button>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ========================================================
-       PRODUCTS
-       ======================================================== -->
-
-        <section class="products" id="products">
-
-            <div class="message">
-
-                Enter your backend URL and admin key,
-                then click <b>Load Products</b>.
-
-            </div>
-
-        </section>
-
-
-
-        <div class="footer" id="lastUpdated">
-            LIFESTYLE WEAR • YOUR TRUST, OUR STANDARD
-        </div>
-
-
-    </main>
-
-
-
-    <div class="toast" id="toast">
-    </div>
-
-
-
-    <script>
-
-
-        /* ==========================================================
-           VARIABLES
-           ========================================================== */
-
-        let productData = [];
-
-        let currentFilter = "all";
-
-
-
-        /* ==========================================================
-           HELPERS
-           ========================================================== */
-
-        function apiUrl() {
-
-            return document
-                .getElementById("api")
-                .value
-                .replace(/\/$/, "");
-
-        }
-
-
-        function showToast(message, error = false) {
-
-            const toast =
-                document.getElementById("toast");
-
-            toast.textContent = message;
-
-            toast.classList.toggle(
-                "error",
-                error
-            );
-
-            toast.classList.add("show");
-
-            setTimeout(
-                () => {
-                    toast.classList.remove("show");
-                },
-                3000
-            );
-
-        }
-
-
-        function setStatus(online, text) {
-
-            const status =
-                document.getElementById("status");
-
-            const statusText =
-                document.getElementById("statusText");
-
-            status.classList.toggle(
-                "online",
-                online
-            );
-
-            statusText.textContent =
-                text;
-
-        }
-
-
-
-        /* ==========================================================
-           LOAD PRODUCTS
-           ========================================================== */
-
-        async function loadProducts() {
-
-            const products =
-                document.getElementById("products");
-
-            products.innerHTML = `
-    <div class="message">
-      Loading products...
-    </div>
-  `;
-
-
-            try {
-
-                const r =
-                    await fetch(
-                        apiUrl() + "/api/products"
-                    );
-
-
-                const data =
-                    await r.json();
-
-
-                if (!r.ok) {
-
-                    throw new Error(
-                        data.detail ||
-                        "Could not load products."
-                    );
-
-                }
-
-
-                productData = data;
-
-
-                setStatus(
-                    true,
-                    "Database connected"
-                );
-
-
-                updateStats();
-
-                renderProducts();
-
-
-                document.getElementById(
-                    "lastUpdated"
-                ).textContent =
-                    "Last synced: " +
-                    new Date().toLocaleTimeString() +
-                    " • LIFESTYLE WEAR";
-
-
-            } catch (e) {
-
-                setStatus(
-                    false,
-                    "Connection failed"
-                );
-
-
-                products.innerHTML = `
-      <div class="message">
-        Could not connect to backend.<br><br>
-        ${esc(e.message)}
-      </div>
-    `;
-
-                showToast(
-                    "Could not connect to backend.",
-                    true
-                );
-
-            }
-
-        }
-
-
-
-        /* ==========================================================
-           UPDATE STATS
-           ========================================================== */
-
-        function updateStats() {
-
-            const total =
-                productData.length;
-
-
-            const stock =
-                productData.reduce(
-                    (sum, p) =>
-                        sum + Number(p.stock),
-                    0
-                );
-
-
-            const out =
-                productData.filter(
-                    p => Number(p.stock) <= 0
-                ).length;
-
-
-            document.getElementById(
-                "totalProducts"
-            ).textContent = total;
-
-
-            document.getElementById(
-                "totalStock"
-            ).textContent = stock;
-
-
-            document.getElementById(
-                "stockOut"
-            ).textContent = out;
-
-        }
-
-
-
-        /* ==========================================================
-           FILTER
-           ========================================================== */
-
-        function setFilter(filter, button) {
-
-            currentFilter = filter;
-
-
-            document
-                .querySelectorAll(".filter")
-                .forEach(
-                    b => b.classList.remove("active")
-                );
-
-
-            button.classList.add("active");
-
-
-            renderProducts();
-
-        }
-
-
-
-        /* ==========================================================
-           RENDER PRODUCTS
-           ========================================================== */
-
-        function renderProducts() {
-
-            const container =
-                document.getElementById("products");
-
-
-            const search =
-                document.getElementById("search")
-                    .value
-                    .toLowerCase()
-                    .trim();
-
-
-            const filtered =
-                productData.filter(p => {
-
-
-                    const matchesSearch =
-                        p.name
-                            .toLowerCase()
-                            .includes(search);
-
-
-                    const stock =
-                        Number(p.stock);
-
-
-                    let matchesFilter = true;
-
-
-                    if (currentFilter === "in") {
-
-                        matchesFilter =
-                            stock > 0;
-
-                    }
-
-
-                    if (currentFilter === "low") {
-
-                        matchesFilter =
-                            stock > 0 &&
-                            stock <= 5;
-
-                    }
-
-
-                    if (currentFilter === "out") {
-
-                        matchesFilter =
-                            stock <= 0;
-
-                    }
-
-
-                    return (
-                        matchesSearch &&
-                        matchesFilter
-                    );
-
-                });
-
-
-            if (!filtered.length) {
-
-                container.innerHTML = `
-      <div class="message">
-        No products found.
-      </div>
-    `;
-
-                return;
-
-            }
-
-
-            container.innerHTML =
-                filtered.map(
-                    p => productCard(p)
-                ).join("");
-
-        }
-
-
-
-        /* ==========================================================
-           PRODUCT CARD
-           ========================================================== */
-
-        function productCard(p) {
-
-            const stock =
-                Number(p.stock);
-
-
-            let badgeClass = "";
-
-            let badgeText =
-                "IN STOCK";
-
-
-            if (stock <= 0) {
-
-                badgeClass = "out";
-
-                badgeText = "STOCK OUT";
-
-            }
-            else if (stock <= 5) {
-
-                badgeClass = "low";
-
-                badgeText = "LOW STOCK";
-
-            }
-
-
-            const image =
-                p.image ||
-                "images/placeholder.jpg";
-
-
-            return `
-
-    <article class="product">
-
-
-      <div class="product-image">
-
+      <!-- LOGO: images/Logo.png -->
+      <div class="logo">
         <img
-          src="${esc(image)}"
-          alt="${esc(p.name)}"
+          src="images/Logo.png"
+          alt="Lifestyle Wear Logo"
           onerror="this.style.display='none'"
+        >
+      </div>
+
+      <div class="brand-text">
+        <strong>LIFESTYLE WEAR</strong>
+        <span>YOUR TRUST, OUR STANDARD.</span>
+      </div>
+
+    </div>
+
+    <div class="header-actions">
+
+      <a
+        class="header-btn"
+        href="products.html"
+      >
+        PRODUCTS
+      </a>
+
+      <a
+        class="header-btn"
+        href="index.html"
+      >
+        WEBSITE
+      </a>
+
+    </div>
+
+  </div>
+</header>
+
+
+<main class="container">
+
+  <section class="hero">
+
+    <div>
+      <div class="eyebrow">
+        Lifestyle Wear / Control Center
+      </div>
+
+      <h1>
+        Stock Dashboard
+      </h1>
+
+      <p>
+        Manage your product stock from one central database.
+        Changes made here are shared with customers across devices.
+      </p>
+    </div>
+
+    <div class="hero-mark">
+      LW
+    </div>
+
+  </section>
+
+
+  <!-- DATABASE CONNECTION -->
+
+  <section class="connection">
+
+    <div class="connection-head">
+
+      <div class="section-label">
+        DATABASE CONNECTION
+      </div>
+
+      <div
+        class="status"
+        id="connectionStatus"
+      >
+        <span class="status-dot"></span>
+        <span id="statusText">Not connected</span>
+      </div>
+
+    </div>
+
+
+    <div class="form-grid">
+
+      <div class="field">
+
+        <label>
+          Backend URL
+        </label>
+
+        <!-- IMPORTANT: Keep this URL -->
+        <input
+          id="api"
+          type="url"
+          value="https://lifestyle-wear-bd.onrender.com"
+          placeholder="https://your-backend.onrender.com"
         >
 
       </div>
 
 
-      <div class="product-info">
+      <div class="field">
 
+        <label>
+          Admin Key
+        </label>
 
-        <div class="product-top">
-
-          <div>
-
-            <h3 class="product-name">
-              ${esc(p.name)}
-            </h3>
-
-            <div class="product-id">
-              PRODUCT ID: LW-${String(p.id).padStart(3, "0")}
-            </div>
-
-          </div>
-
-
-          <span
-            class="stock-badge ${badgeClass}"
-          >
-            ${badgeText}
-          </span>
-
-        </div>
-
-
-        <div class="current">
-
-          <span class="current-number">
-            ${stock}
-          </span>
-
-          <span class="current-label">
-            CURRENT STOCK
-          </span>
-
-        </div>
-
-
-        <div class="controls">
-
-          <input
-            class="stock-input"
-            id="s-${p.id}"
-            type="number"
-            min="0"
-            value="${stock}"
-          >
-
-
-          <button
-            class="save-btn"
-            onclick="saveStock(${p.id})"
-          >
-            UPDATE
-          </button>
-
-        </div>
-
-
-        <div class="quick">
-
-          <button
-            onclick="quickStock(${p.id},5)"
-          >
-            +5
-          </button>
-
-          <button
-            onclick="quickStock(${p.id},10)"
-          >
-            +10
-          </button>
-
-          <button
-            onclick="quickStock(${p.id},20)"
-          >
-            +20
-          </button>
-
-          <button
-            onclick="quickStock(${p.id},50)"
-          >
-            +50
-          </button>
-
-        </div>
-
+        <input
+          id="adminKey"
+          type="password"
+          placeholder="Enter your admin key"
+          autocomplete="off"
+        >
 
       </div>
 
-    </article>
 
-  `;
+      <button
+        class="load-btn"
+        id="loadBtn"
+        onclick="loadProducts()"
+      >
+        CONNECT & LOAD
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- STATISTICS -->
+
+  <section class="stats">
+
+    <div class="stat gold">
+      <div class="stat-label">
+        Total Products
+      </div>
+
+      <div
+        class="stat-number"
+        id="totalProducts"
+      >
+        0
+      </div>
+    </div>
+
+
+    <div class="stat">
+      <div class="stat-label">
+        Total Stock
+      </div>
+
+      <div
+        class="stat-number"
+        id="totalStock"
+      >
+        0
+      </div>
+    </div>
+
+
+    <div class="stat low">
+      <div class="stat-label">
+        Low Stock
+      </div>
+
+      <div
+        class="stat-number"
+        id="lowStock"
+      >
+        0
+      </div>
+    </div>
+
+
+    <div class="stat out">
+      <div class="stat-label">
+        Stock Out
+      </div>
+
+      <div
+        class="stat-number"
+        id="stockOut"
+      >
+        0
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- PRODUCTS -->
+
+  <section>
+
+    <div class="workspace-head">
+
+      <div class="workspace-title">
+
+        <h2>
+          Product Inventory
+        </h2>
+
+        <p>
+          Update the central stock database from any device.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <div class="toolbar">
+
+      <div class="search-wrap">
+
+        <span class="search-icon">
+          ⌕
+        </span>
+
+        <input
+          class="search"
+          id="search"
+          type="search"
+          placeholder="Search product name, ID or category..."
+          oninput="renderProducts()"
+        >
+
+      </div>
+
+
+      <div class="filters">
+
+        <button
+          class="filter active"
+          data-filter="all"
+          onclick="setFilter('all',this)"
+        >
+          ALL
+        </button>
+
+        <button
+          class="filter"
+          data-filter="in"
+          onclick="setFilter('in',this)"
+        >
+          IN STOCK
+        </button>
+
+        <button
+          class="filter"
+          data-filter="low"
+          onclick="setFilter('low',this)"
+        >
+          LOW
+        </button>
+
+        <button
+          class="filter"
+          data-filter="out"
+          onclick="setFilter('out',this)"
+        >
+          STOCK OUT
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <div
+      class="products"
+      id="products"
+    >
+
+      <div class="message">
+        Connecting to your inventory...
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <div class="footer">
+    LIFESTYLE WEAR © 2026 · STOCK MANAGEMENT SYSTEM
+  </div>
+
+</main>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+
+/* =========================================================
+   LIFESTYLE WEAR ADMIN DASHBOARD
+   Backend: FastAPI + Database
+   ========================================================= */
+
+
+/* =========================
+   GLOBAL VARIABLES
+   ========================= */
+
+let products = [];
+
+let currentFilter = "all";
+
+
+/* =========================
+   GET BACKEND URL
+   ========================= */
+
+function getApi(){
+
+  let url =
+    document.getElementById("api").value.trim();
+
+  return url.replace(/\/+$/,"");
+
+}
+
+
+/* =========================
+   ADMIN KEY
+   ========================= */
+
+function getAdminKey(){
+
+  return document
+    .getElementById("adminKey")
+    .value
+    .trim();
+
+}
+
+
+/* =========================
+   ERROR FORMATTER
+   ========================= */
+
+function formatError(detail){
+
+  if(!detail){
+    return "Something went wrong.";
+  }
+
+  if(typeof detail === "string"){
+    return detail;
+  }
+
+  if(Array.isArray(detail)){
+
+    return detail
+      .map(item => {
+
+        if(typeof item === "string"){
+          return item;
+        }
+
+        if(item && item.msg){
+          return item.msg;
+        }
+
+        return JSON.stringify(item);
+
+      })
+      .join(", ");
+
+  }
+
+  if(typeof detail === "object"){
+
+    if(detail.message){
+      return detail.message;
+    }
+
+    if(detail.msg){
+      return detail.msg;
+    }
+
+    return JSON.stringify(detail);
+  }
+
+  return String(detail);
+}
+
+
+/* =========================
+   TOAST
+   ========================= */
+
+let toastTimer;
+
+function toast(message,isError=false){
+
+  const el =
+    document.getElementById("toast");
+
+  el.textContent = message;
+
+  el.className =
+    "toast show" +
+    (isError ? " error" : "");
+
+  clearTimeout(toastTimer);
+
+  toastTimer =
+    setTimeout(() => {
+
+      el.classList.remove("show");
+
+    },3500);
+
+}
+
+
+/* =========================
+   CONNECTION STATUS
+   ========================= */
+
+function setConnection(online,text){
+
+  const status =
+    document.getElementById("connectionStatus");
+
+  const statusText =
+    document.getElementById("statusText");
+
+  status.classList.toggle(
+    "online",
+    online
+  );
+
+  statusText.textContent = text;
+
+}
+
+
+/* =========================
+   LOAD PRODUCTS
+   ========================= */
+
+async function loadProducts(){
+
+  const button =
+    document.getElementById("loadBtn");
+
+  button.disabled = true;
+
+  button.textContent = "CONNECTING...";
+
+  setConnection(false,"Connecting...");
+
+
+  try{
+
+    const response =
+      await fetch(
+        getApi() + "/api/products",
+        {
+          method:"GET",
+          cache:"no-store"
+        }
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(!response.ok){
+
+      throw new Error(
+        formatError(data.detail)
+      );
+
+    }
+
+
+    products =
+      Array.isArray(data)
+        ? data
+        : (
+            Array.isArray(data.products)
+              ? data.products
+              : []
+          );
+
+
+    setConnection(
+      true,
+      "Database connected"
+    );
+
+
+    renderStats();
+
+    renderProducts();
+
+    toast(
+      products.length +
+      " products loaded successfully."
+    );
+
+
+  }catch(error){
+
+    products = [];
+
+    renderStats();
+
+    renderProducts();
+
+    setConnection(
+      false,
+      "Connection failed"
+    );
+
+    toast(
+      error.message ||
+      "Unable to connect to database.",
+      true
+    );
+
+  }finally{
+
+    button.disabled = false;
+
+    button.textContent =
+      "CONNECT & LOAD";
+
+  }
+
+}
+
+
+/* =========================
+   RENDER STATISTICS
+   ========================= */
+
+function renderStats(){
+
+  let totalStock = 0;
+
+  let lowStock = 0;
+
+  let stockOut = 0;
+
+
+  products.forEach(product => {
+
+    const stock =
+      Number(product.stock) || 0;
+
+
+    totalStock += stock;
+
+
+    if(stock === 0){
+
+      stockOut++;
+
+    }else if(stock <= 5){
+
+      lowStock++;
+
+    }
+
+  });
+
+
+  document.getElementById(
+    "totalProducts"
+  ).textContent =
+    products.length;
+
+
+  document.getElementById(
+    "totalStock"
+  ).textContent =
+    totalStock;
+
+
+  document.getElementById(
+    "lowStock"
+  ).textContent =
+    lowStock;
+
+
+  document.getElementById(
+    "stockOut"
+  ).textContent =
+    stockOut;
+
+}
+
+
+/* =========================
+   FILTER
+   ========================= */
+
+function setFilter(filter,button){
+
+  currentFilter = filter;
+
+
+  document
+    .querySelectorAll(".filter")
+    .forEach(btn => {
+
+      btn.classList.remove("active");
+
+    });
+
+
+  if(button){
+    button.classList.add("active");
+  }
+
+
+  renderProducts();
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+   ========================= */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   IMAGE FALLBACK
+   ========================= */
+
+function imageFallback(img){
+
+  img.onerror = null;
+
+  img.src =
+    "data:image/svg+xml;charset=UTF-8," +
+    encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg"
+           width="400"
+           height="500"
+           viewBox="0 0 400 500">
+
+        <rect width="400"
+              height="500"
+              fill="#20201d"/>
+
+        <text
+          x="200"
+          y="245"
+          text-anchor="middle"
+          fill="#c9a45c"
+          font-size="42"
+          font-family="Georgia">
+          LW
+        </text>
+
+        <text
+          x="200"
+          y="285"
+          text-anchor="middle"
+          fill="#77746d"
+          font-size="13"
+          font-family="Arial">
+          LIFESTYLE WEAR
+        </text>
+
+      </svg>
+    `);
+
+}
+
+
+/* =========================
+   RENDER PRODUCTS
+   ========================= */
+
+function renderProducts(){
+
+  const container =
+    document.getElementById("products");
+
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .trim()
+      .toLowerCase();
+
+
+  let filtered =
+    products.filter(product => {
+
+      const stock =
+        Number(product.stock) || 0;
+
+
+      /* FILTER */
+
+      if(currentFilter === "in" && stock <= 0){
+        return false;
+      }
+
+      if(currentFilter === "low" &&
+         !(stock > 0 && stock <= 5)){
+        return false;
+      }
+
+      if(currentFilter === "out" && stock !== 0){
+        return false;
+      }
+
+
+      /* SEARCH */
+
+      if(!search){
+        return true;
+      }
+
+
+      const text =
+        [
+          product.name,
+          product.id,
+          product.category
+        ]
+        .join(" ")
+        .toLowerCase();
+
+
+      return text.includes(search);
+
+    });
+
+
+  if(!filtered.length){
+
+    container.innerHTML = `
+      <div class="message">
+        No products found.
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  container.innerHTML =
+    filtered
+      .map(product => {
+
+        const stock =
+          Number(product.stock) || 0;
+
+
+        let badge =
+          "IN STOCK";
+
+        let badgeClass = "";
+
+
+        if(stock === 0){
+
+          badge = "STOCK OUT";
+
+          badgeClass = "out";
+
+        }else if(stock <= 5){
+
+          badge = "LOW STOCK";
+
+          badgeClass = "low";
 
         }
 
 
-
-        /* ==========================================================
-           QUICK RESTOCK
-           ========================================================== */
-
-        function quickStock(id, amount) {
-
-            const input =
-                document.getElementById(
-                    "s-" + id
-                );
+        const image =
+          product.image ||
+          "images/Logo.png";
 
 
-            if (!input)
-                return;
+        return `
+
+          <article class="product">
+
+            <div class="product-image">
+
+              <img
+                src="${escapeHtml(image)}"
+                alt="${escapeHtml(product.name)}"
+                loading="lazy"
+                onerror="imageFallback(this)"
+              >
+
+            </div>
 
 
-            const current =
-                Number(input.value) || 0;
+            <div class="product-info">
+
+              <div class="product-top">
+
+                <div>
+
+                  <h3 class="product-name">
+                    ${escapeHtml(product.name)}
+                  </h3>
+
+                  <div class="product-id">
+                    PRODUCT ID #${escapeHtml(product.id)}
+                  </div>
+
+                  ${
+                    product.category
+                      ? `
+                        <div class="product-category">
+                          ${escapeHtml(product.category)}
+                        </div>
+                      `
+                      : ""
+                  }
+
+                </div>
 
 
-            input.value =
-                current + amount;
+                <div
+                  class="stock-badge ${badgeClass}"
+                >
+                  ${badge}
+                </div>
 
+              </div>
+
+
+              <div class="current">
+
+                <span class="current-number">
+                  ${stock}
+                </span>
+
+                <span class="current-label">
+                  CURRENT STOCK
+                </span>
+
+              </div>
+
+
+              <div class="controls">
+
+                <input
+                  class="stock-input"
+                  id="stock-${product.id}"
+                  type="number"
+                  min="0"
+                  value="${stock}"
+                  aria-label="Stock for ${escapeHtml(product.name)}"
+                >
+
+
+                <button
+                  class="save-btn"
+                  id="save-${product.id}"
+                  onclick="saveStock(${product.id})"
+                >
+                  UPDATE
+                </button>
+
+              </div>
+
+
+              <div class="quick">
+
+                <button
+                  onclick="quickStock(${product.id},-1)"
+                  title="Decrease by 1"
+                >
+                  −1
+                </button>
+
+                <button
+                  onclick="quickStock(${product.id},5)"
+                >
+                  +5
+                </button>
+
+                <button
+                  onclick="quickStock(${product.id},10)"
+                >
+                  +10
+                </button>
+
+                <button
+                  onclick="quickStock(${product.id},20)"
+                >
+                  +20
+                </button>
+
+              </div>
+
+            </div>
+
+          </article>
+
+        `;
+
+      })
+      .join("");
+
+}
+
+
+/* =========================
+   QUICK STOCK
+   ========================= */
+
+function quickStock(id,amount){
+
+  const input =
+    document.getElementById(
+      "stock-" + id
+    );
+
+
+  if(!input){
+    return;
+  }
+
+
+  let value =
+    Number(input.value) || 0;
+
+
+  value += amount;
+
+
+  if(value < 0){
+    value = 0;
+  }
+
+
+  input.value = value;
+
+}
+
+
+/* =========================
+   SAVE STOCK
+   ========================= */
+
+async function saveStock(id){
+
+  const input =
+    document.getElementById(
+      "stock-" + id
+    );
+
+
+  const button =
+    document.getElementById(
+      "save-" + id
+    );
+
+
+  if(!input || !button){
+    return;
+  }
+
+
+  const stock =
+    Number(input.value);
+
+
+  if(!Number.isInteger(stock) || stock < 0){
+
+    toast(
+      "Stock must be 0 or a positive whole number.",
+      true
+    );
+
+    input.focus();
+
+    return;
+
+  }
+
+
+  const adminKey =
+    getAdminKey();
+
+
+  if(!adminKey){
+
+    toast(
+      "Enter your Admin Key before updating stock.",
+      true
+    );
+
+    document
+      .getElementById("adminKey")
+      .focus();
+
+    return;
+
+  }
+
+
+  button.disabled = true;
+
+  button.textContent =
+    "SAVING...";
+
+
+  try{
+
+    const response =
+      await fetch(
+        getApi() +
+        "/api/admin/products/" +
+        encodeURIComponent(id) +
+        "/stock",
+        {
+          method:"PUT",
+
+          headers:{
+            "Content-Type":"application/json",
+            "X-Admin-Key":adminKey
+          },
+
+          body:JSON.stringify({
+            stock:stock
+          })
         }
+      );
 
 
+    const data =
+      await response.json();
 
-        /* ==========================================================
-           SAVE STOCK
-           ========================================================== */
 
-        async function saveStock(id) {
+    if(!response.ok){
 
-            const key =
-                document.getElementById(
-                    "key"
-                ).value;
+      throw new Error(
+        formatError(data.detail)
+      );
 
+    }
 
-            if (!key) {
 
-                showToast(
-                    "Enter your Admin Key first.",
-                    true
-                );
+    const product =
+      products.find(
+        p => Number(p.id) === Number(id)
+      );
 
-                return;
 
-            }
+    if(product){
 
+      product.stock = stock;
 
-            const input =
-                document.getElementById(
-                    "s-" + id
-                );
+    }
 
 
-            const stock =
-                Number(input.value);
+    renderStats();
 
+    renderProducts();
 
-            if (!Number.isInteger(stock) || stock < 0) {
 
-                showToast(
-                    "Stock must be a whole number.",
-                    true
-                );
+    setConnection(
+      true,
+      "Database connected"
+    );
 
-                return;
 
-            }
+    toast(
+      "Stock updated successfully."
+    );
 
 
-            const button =
-                input
-                    .closest(".product")
-                    .querySelector(".save-btn");
+  }catch(error){
 
+    toast(
+      error.message ||
+      "Stock update failed.",
+      true
+    );
 
-            button.disabled = true;
+  }finally{
 
-            button.textContent =
-                "SAVING...";
+    button.disabled = false;
 
+    button.textContent =
+      "UPDATE";
 
-            try {
+  }
 
-                const r =
-                    await fetch(
-                        apiUrl() +
-                        "/api/admin/products/" +
-                        id +
-                        "/stock",
-                        {
+}
 
-                            method: "PUT",
 
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
+/* =========================
+   AUTO LOAD
+   ========================= */
 
-                                "X-Admin-Key":
-                                    key
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
 
-                            },
+    loadProducts();
 
-                            body: JSON.stringify({
-                                stock: stock
-                            })
+  }
+);
 
-                        }
-                    );
-
-
-                const data =
-                    await r.json();
-
-
-                if (!r.ok) {
-
-                    throw new Error(
-                        data.detail ||
-                        "Failed to update stock."
-                    );
-
-                }
-
-
-                showToast(
-                    data.name +
-                    " stock updated to " +
-                    data.stock
-                );
-
-
-                /* Reload from central database */
-
-                await loadProducts();
-
-
-            } catch (e) {
-
-                if (
-                    e.message
-                        .toLowerCase()
-                        .includes("admin key")
-                ) {
-
-                    showToast(
-                        "Invalid Admin Key.",
-                        true
-                    );
-
-                } else {
-
-                    showToast(
-                        e.message,
-                        true
-                    );
-
-                }
-
-            } finally {
-
-                button.disabled = false;
-
-                button.textContent =
-                    "UPDATE";
-
-            }
-
-        }
-
-
-
-        /* ==========================================================
-           ESCAPE HTML
-           ========================================================== */
-
-        function esc(s) {
-
-            return String(s)
-                .replace(
-                    /[&<>"']/g,
-                    m => ({
-                        "&": "&amp;",
-                        "<": "&lt;",
-                        ">": "&gt;",
-                        '"': "&quot;",
-                        "'": "&#039;"
-                    }[m])
-                );
-
-        }
-
-
-    </script>
+</script>
 
 </body>
-
 </html>
