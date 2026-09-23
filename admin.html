@@ -610,6 +610,157 @@ input:focus{
   margin-top:42px;
 }
 
+/* PRODUCT ACTIONS */
+.product-actions{
+  display:flex;
+  gap:6px;
+  margin-top:8px;
+}
+.action-btn{
+  flex:1;
+  min-height:36px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:#11110f;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:bold;
+  letter-spacing:.7px;
+  transition:.2s;
+}
+.action-btn:hover{
+  border-color:var(--gold);
+  color:var(--gold2);
+}
+.action-btn.danger:hover{
+  border-color:var(--red);
+  color:#ffaaa4;
+  background:#211311;
+}
+.add-product-btn{
+  border:1px solid var(--gold);
+  background:var(--gold);
+  color:#111;
+  border-radius:10px;
+  min-height:42px;
+  padding:0 16px;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:.7px;
+  transition:.2s;
+}
+.add-product-btn:hover{
+  background:var(--gold2);
+  transform:translateY(-1px);
+}
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+  background:rgba(0,0,0,.72);
+  backdrop-filter:blur(10px);
+}
+.modal-backdrop.show{display:flex}
+.modal{
+  width:min(680px,100%);
+  max-height:calc(100vh - 36px);
+  overflow:auto;
+  background:linear-gradient(145deg,#191917,#0f0f0e);
+  border:1px solid #34332d;
+  border-radius:18px;
+  box-shadow:0 30px 100px rgba(0,0,0,.55);
+}
+.modal-head{
+  position:sticky;
+  top:0;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  background:rgba(20,20,18,.95);
+  backdrop-filter:blur(12px);
+}
+.modal-head h2{
+  margin:0;
+  font:400 24px Georgia,serif;
+}
+.modal-close{
+  width:36px;
+  height:36px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:#11110f;
+  color:var(--muted);
+  font-size:18px;
+}
+.modal-close:hover{color:var(--text);border-color:var(--gold)}
+.modal-body{padding:20px}
+.form-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+.form-field.full{grid-column:1/-1}
+.form-field label{
+  display:block;
+  margin-bottom:7px;
+  color:var(--muted);
+  font-size:9px;
+  letter-spacing:1.4px;
+  text-transform:uppercase;
+}
+.form-field input,.form-field select,.form-field textarea{
+  width:100%;
+  border:1px solid var(--border);
+  background:#0d0d0c;
+  color:var(--text);
+  border-radius:9px;
+  padding:12px 13px;
+  outline:none;
+  font-size:12px;
+}
+.form-field textarea{min-height:100px;resize:vertical}
+.form-field input:focus,.form-field select:focus,.form-field textarea:focus{
+  border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,164,92,.07);
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:18px;
+  padding-top:16px;
+  border-top:1px solid var(--border);
+}
+.modal-btn{
+  min-height:42px;
+  padding:0 17px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:bold;
+  border:1px solid var(--border);
+  background:#11110f;
+  color:var(--text);
+}
+.modal-btn.primary{background:var(--gold);color:#111;border-color:var(--gold)}
+.modal-btn.primary:hover{background:var(--gold2)}
+.modal-btn:disabled{opacity:.55;cursor:not-allowed}
+@media(max-width:600px){
+  .workspace-head{gap:12px}
+  .add-product-btn{width:100%}
+  .form-fields{grid-template-columns:1fr}
+  .form-field.full{grid-column:auto}
+  .modal-actions{display:grid;grid-template-columns:1fr 1fr}
+  .modal-btn{width:100%}
+}
+
 /* TABLET */
 @media(max-width:1050px){
 
@@ -787,6 +938,19 @@ input:focus{
     bottom:16px;
   }
 }
+
+.modal-form{padding:20px;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+.modal-grid .full{grid-column:1/-1;}
+.modal-grid textarea{width:100%;resize:vertical;border:1px solid var(--border);background:#0d0d0c;color:var(--text);border-radius:10px;padding:13px 14px;outline:none;font:12px Arial;}
+.modal-grid textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,164,92,.07);}
+.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:18px;}
+.modal-cancel,.modal-save{min-height:42px;padding:0 16px;border-radius:9px;font-size:9px;font-weight:bold;letter-spacing:.8px;}
+.modal-cancel{border:1px solid var(--border);background:#11110f;color:var(--muted);}
+.modal-save{border:0;background:var(--gold);color:#111;}
+.modal-save:hover{background:var(--gold2);}
+@media(max-width:600px){.modal-grid{grid-template-columns:1fr;}.modal-grid .full{grid-column:auto;}.modal-actions{flex-direction:column-reverse;}.modal-cancel,.modal-save{width:100%;}}
+
 </style>
 </head>
 
@@ -1010,6 +1174,10 @@ input:focus{
 
       </div>
 
+      <button class="add-product-btn" onclick="openProductModal()">
+        ＋ ADD PRODUCT
+      </button>
+
     </div>
 
 
@@ -1092,10 +1260,31 @@ input:focus{
 </main>
 
 
-<div
-  class="toast"
-  id="toast"
-></div>
+<div class="modal-backdrop" id="productModal" onclick="closeProductModal(event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-head">
+      <h2 id="modalTitle">Add Product</h2>
+      <button type="button" class="modal-close" onclick="document.getElementById('productModal').classList.remove('show'); editingProductId=null;">×</button>
+    </div>
+    <form id="productForm" class="modal-form" onsubmit="saveProduct(event)">
+      <div class="modal-grid">
+        <div class="field"><label>Product Name</label><input id="productName" required maxlength="200"></div>
+        <div class="field"><label>Price (BDT)</label><input id="productPrice" type="number" min="0" required></div>
+        <div class="field"><label>Stock</label><input id="productStock" type="number" min="0" required></div>
+        <div class="field"><label>Category</label><input id="productCategory" required maxlength="100" placeholder="Dresses / T-Shirts / Drop-Shoulder"></div>
+        <div class="field"><label>Badge</label><input id="productBadge" maxlength="30" placeholder="NEW / BEST / POPULAR"></div>
+        <div class="field"><label>Image Path</label><input id="productImage" required maxlength="500" placeholder="images/DS-5.webp"></div>
+        <div class="field full"><label>Description</label><textarea id="productDescription" maxlength="1000" rows="4"></textarea></div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="modal-cancel" onclick="document.getElementById('productModal').classList.remove('show'); editingProductId=null;">CANCEL</button>
+        <button type="submit" class="modal-save" id="modalSaveBtn">SAVE PRODUCT</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
 
 
 <script>
@@ -1720,6 +1909,11 @@ function renderProducts(){
 
               </div>
 
+              <div class="product-actions">
+                <button class="action-btn" onclick="openEditProduct(${product.id})">EDIT</button>
+                <button class="action-btn danger" onclick="deleteProduct(${product.id})">REMOVE</button>
+              </div>
+
             </div>
 
           </article>
@@ -1917,6 +2111,157 @@ async function saveStock(id){
 
 }
 
+
+/* =========================
+   PRODUCT ADD / EDIT / REMOVE
+   ========================= */
+
+let editingProductId = null;
+
+function openProductModal(){
+  editingProductId = null;
+  document.getElementById("modalTitle").textContent = "Add Product";
+  document.getElementById("modalSaveBtn").textContent = "SAVE PRODUCT";
+  document.getElementById("productForm").reset();
+  document.getElementById("productCategory").value = "Drop-Shoulder";
+  document.getElementById("productModal").classList.add("show");
+  setTimeout(() => document.getElementById("productName").focus(), 50);
+}
+
+function openEditProduct(id){
+  const product = products.find(p => Number(p.id) === Number(id));
+  if(!product){
+    toast("Product not found.", true);
+    return;
+  }
+
+  editingProductId = Number(id);
+  document.getElementById("modalTitle").textContent = "Edit Product";
+  document.getElementById("modalSaveBtn").textContent = "SAVE CHANGES";
+  document.getElementById("productName").value = product.name || "";
+  document.getElementById("productPrice").value = Number(product.price) || 0;
+  document.getElementById("productStock").value = Number(product.stock) || 0;
+  document.getElementById("productCategory").value = product.category || "Drop-Shoulder";
+  document.getElementById("productBadge").value = product.badge || "";
+  document.getElementById("productImage").value = product.image || "";
+  document.getElementById("productDescription").value = product.description || "";
+  document.getElementById("productModal").classList.add("show");
+}
+
+function closeProductModal(event){
+  if(event && event.target !== document.getElementById("productModal")){
+    return;
+  }
+  document.getElementById("productModal").classList.remove("show");
+  editingProductId = null;
+}
+
+async function saveProduct(event){
+  event.preventDefault();
+
+  const isEditing = editingProductId !== null;
+  const productId = editingProductId;
+  const adminKey = getAdminKey();
+  if(!adminKey){
+    toast("Enter your Admin Key first.", true);
+    document.getElementById("adminKey").focus();
+    return;
+  }
+
+  const name = document.getElementById("productName").value.trim();
+  const price = Number(document.getElementById("productPrice").value);
+  const stock = Number(document.getElementById("productStock").value);
+  const category = document.getElementById("productCategory").value;
+  const badge = document.getElementById("productBadge").value.trim();
+  const image = document.getElementById("productImage").value.trim();
+  const description = document.getElementById("productDescription").value.trim();
+
+  if(!name || !Number.isInteger(price) || price < 0 || !Number.isInteger(stock) || stock < 0){
+    toast("Enter valid product information.", true);
+    return;
+  }
+
+  const button = document.getElementById("modalSaveBtn");
+  button.disabled = true;
+  button.textContent = editingProductId ? "SAVING..." : "ADDING...";
+
+  const payload = {name, price, image, category, stock, badge, description};
+
+  try{
+    const url = isEditing
+      ? getApi() + "/api/admin/products/" + encodeURIComponent(productId)
+      : getApi() + "/api/admin/products";
+
+    const response = await fetch(url,{
+      method: isEditing ? "PUT" : "POST",
+      headers:{
+        "Content-Type":"application/json",
+        "X-Admin-Key":adminKey
+      },
+      body:JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if(!response.ok){
+      throw new Error(formatError(data.detail));
+    }
+
+    closeProductModal();
+    await loadProducts();
+    toast(isEditing ? "Product updated successfully." : "Product added successfully.");
+  }catch(error){
+    toast(error.message || "Could not save product.", true);
+  }finally{
+    button.disabled = false;
+    button.textContent = isEditing ? "SAVE CHANGES" : "SAVE PRODUCT";
+  }
+}
+
+async function deleteProduct(id){
+  const product = products.find(p => Number(p.id) === Number(id));
+  if(!product){
+    toast("Product not found.", true);
+    return;
+  }
+
+  const adminKey = getAdminKey();
+  if(!adminKey){
+    toast("Enter your Admin Key first.", true);
+    document.getElementById("adminKey").focus();
+    return;
+  }
+
+  if(!confirm(`Remove "${product.name}" from the store?\n\nThis removes the product from the central database.`)){
+    return;
+  }
+
+  try{
+    const response = await fetch(
+      getApi() + "/api/admin/products/" + encodeURIComponent(id),
+      {
+        method:"DELETE",
+        headers:{"X-Admin-Key":adminKey}
+      }
+    );
+
+    const data = await response.json();
+    if(!response.ok){
+      throw new Error(formatError(data.detail));
+    }
+
+    await loadProducts();
+    toast("Product removed successfully.");
+  }catch(error){
+    toast(error.message || "Could not remove product.", true);
+  }
+}
+
+document.addEventListener("keydown", event => {
+  if(event.key === "Escape"){
+    document.getElementById("productModal").classList.remove("show");
+    editingProductId = null;
+  }
+});
 
 /* =========================
    AUTO LOAD

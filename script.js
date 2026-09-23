@@ -2,13 +2,13 @@
    LIFESTYLE WEAR — STORE SETTINGS
    ========================================================== */
 
-/* CHANGE #1: WhatsApp number */
+/* WhatsApp number */
 const WHATSAPP_NUMBER = "8801615574500";
 
-/* CHANGE #2: Delivery charge */
+/* Delivery charge */
 const DELIVERY_CHARGE = 100;
 
-/* CHANGE #3: Categories */
+/* Categories */
 const CATEGORIES = [
   { name: "All", sub: "Everything" },
   { name: "Dresses", sub: "Female Dress" },
@@ -17,10 +17,7 @@ const CATEGORIES = [
   { name: "New Arrivals", sub: "Just in" }
 ];
 
-/* CHANGE #4: Products
-   ⭐ To add/change stock, edit ONLY the stock number.
-   Example: stock: 20
-*/
+/* Products */
 const PRODUCTS = [
   {
     id: 1,
@@ -28,7 +25,7 @@ const PRODUCTS = [
     price: 550,
     image: "images/DS-1.webp",
     category: "Drop-Shoulder",
-    stock: 15,   //Use this in console -> localStorage.removeItem("LW_STOCK");
+    stock: 15,
     badge: "You know",
     description: "A clean, comfortable piece selected for everyday elegance."
   },
@@ -111,12 +108,16 @@ const PRODUCTS = [
   }
 ];
 
+
 /* ==========================================================
    ONLINE DATABASE
    ========================================================== */
 
-const API_BASE_URL = "https://lifestyle-wear-bd.onrender.com";
+const API_BASE_URL =
+  "https://lifestyle-wear-bd.onrender.com";
+
 let stockReady = false;
+
 
 /* ==========================================================
    BASIC SETTINGS
@@ -141,47 +142,71 @@ const placeholder =
   `);
 
 
-
 /* ==========================================================
    LOAD STOCK FROM ONLINE DATABASE
    ========================================================== */
 
-async function loadDatabaseStock() {
+/*
+   FIX:
+   The backend database is the ONLY source of truth
+   for stock.
+*/
+
+async function loadDatabaseStock(showError = true) {
 
   try {
 
     const response =
-      await fetch(`${API_BASE_URL}/api/products`);
+      await fetch(
+        `${API_BASE_URL}/api/products`,
+        {
+          method: "GET",
+          cache: "no-store"
+        }
+      );
 
-    if (!response.ok)
-      throw new Error("Failed to load stock");
+    if (!response.ok) {
+      throw new Error(
+        "Failed to load live stock."
+      );
+    }
 
     const databaseProducts =
       await response.json();
 
 
-    databaseProducts.forEach(dbProduct => {
+    databaseProducts.forEach(
+      dbProduct => {
 
-      const product =
-        PRODUCTS.find(
-          p => p.id === dbProduct.id
-        );
+        const product =
+          PRODUCTS.find(
+            p => p.id === dbProduct.id
+          );
 
-      if (product) {
+        if (product) {
 
-        product.stock =
-          Number(dbProduct.stock);
+          product.stock =
+            Number(dbProduct.stock);
+
+        }
 
       }
-
-    });
+    );
 
 
     stockReady = true;
 
+
+    /*
+       FIX:
+       Immediately refresh every place where
+       stock is displayed.
+    */
+
     renderFeatured();
     renderProductsPage();
     renderCart();
+
 
   } catch (error) {
 
@@ -190,20 +215,36 @@ async function loadDatabaseStock() {
       error
     );
 
-    alert(
-      "Unable to load live stock. Please refresh the page."
-    );
+    stockReady = false;
+
+
+    /*
+       FIX:
+       Don't repeatedly show alerts during
+       the automatic 5-second sync.
+    */
+
+    if (showError) {
+
+      alert(
+        "Unable to load live stock. Please refresh the page."
+      );
+
+    }
 
   }
 
 }
+
 
 /* ==========================================================
    CART
    ========================================================== */
 
 let cart =
-  JSON.parse(localStorage.getItem("LW_CART") || "[]");
+  JSON.parse(
+    localStorage.getItem("LW_CART") || "[]"
+  );
 
 let selectedCategory = "All";
 let search = "";
@@ -214,25 +255,33 @@ let quickProduct = null;
    HELPERS
    ========================================================== */
 
-const $ = id => document.getElementById(id);
+const $ =
+  id =>
+    document.getElementById(id);
 
-const money = n =>
-  Number(n).toLocaleString("en-BD");
 
-const img = s =>
-  s || placeholder;
+const money =
+  n =>
+    Number(n).toLocaleString("en-BD");
 
-const escape = s =>
-  String(s).replace(
-    /[&<>"']/g,
-    m => ({
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;"
-    }[m])
-  );
+
+const img =
+  s =>
+    s || placeholder;
+
+
+const escape =
+  s =>
+    String(s).replace(
+      /[&<>"']/g,
+      m => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[m])
+    );
 
 
 /* ==========================================================
@@ -240,14 +289,13 @@ const escape = s =>
    ========================================================== */
 
 function save() {
+
   localStorage.setItem(
     "LW_CART",
     JSON.stringify(cart)
   );
+
 }
-
-
-
 
 
 /* ==========================================================
@@ -257,7 +305,8 @@ function save() {
 function quantity() {
 
   return cart.reduce(
-    (total, item) => total + item.qty,
+    (total, item) =>
+      total + item.qty,
     0
   );
 
@@ -270,12 +319,16 @@ function subtotal() {
     (total, item) => {
 
       const product =
-        PRODUCTS.find(p => p.id === item.id);
+        PRODUCTS.find(
+          p => p.id === item.id
+        );
 
       return total +
-        (product
-          ? product.price * item.qty
-          : 0);
+        (
+          product
+            ? product.price * item.qty
+            : 0
+        );
 
     },
     0
@@ -291,44 +344,50 @@ function subtotal() {
 function add(id) {
 
   const product =
-    PRODUCTS.find(p => p.id === id);
+    PRODUCTS.find(
+      p => p.id === id
+    );
 
-  if (!product) return;
+  if (!product)
+    return;
 
-
-  /* STOCK OUT CHECK */
 
   if (product.stock <= 0) {
 
-    alert("Sorry, this product is out of stock.");
+    alert(
+      "Sorry, this product is out of stock."
+    );
 
     return;
+
   }
 
 
-  /* FIND ITEM IN BAG */
-
   const item =
-    cart.find(x => x.id === id);
+    cart.find(
+      x => x.id === id
+    );
 
 
   const currentQty =
-    item ? item.qty : 0;
+    item
+      ? item.qty
+      : 0;
 
 
-  /* STOCK LIMIT */
-
-  if (currentQty >= product.stock) {
+  if (
+    currentQty >=
+    product.stock
+  ) {
 
     alert(
       `Only ${product.stock} item(s) available in stock.`
     );
 
     return;
+
   }
 
-
-  /* ADD PRODUCT */
 
   if (item) {
 
@@ -360,28 +419,36 @@ function add(id) {
 function change(id, n) {
 
   const item =
-    cart.find(x => x.id === id);
+    cart.find(
+      x => x.id === id
+    );
 
-  if (!item) return;
+  if (!item)
+    return;
 
 
   const product =
-    PRODUCTS.find(p => p.id === id);
+    PRODUCTS.find(
+      p => p.id === id
+    );
 
-  if (!product) return;
+  if (!product)
+    return;
 
-
-  /* INCREASE */
 
   if (n > 0) {
 
-    if (item.qty >= product.stock) {
+    if (
+      item.qty >=
+      product.stock
+    ) {
 
       alert(
         `Only ${product.stock} item(s) available in stock.`
       );
 
       return;
+
     }
 
   }
@@ -390,12 +457,12 @@ function change(id, n) {
   item.qty += n;
 
 
-  /* REMOVE IF ZERO */
-
   if (item.qty <= 0) {
 
     cart =
-      cart.filter(x => x.id !== id);
+      cart.filter(
+        x => x.id !== id
+      );
 
   }
 
@@ -414,7 +481,9 @@ function change(id, n) {
 function removeItem(id) {
 
   cart =
-    cart.filter(x => x.id !== id);
+    cart.filter(
+      x => x.id !== id
+    );
 
   save();
 
@@ -429,8 +498,11 @@ function removeItem(id) {
 
 function renderCart() {
 
-  const q = quantity();
-  const sub = subtotal();
+  const q =
+    quantity();
+
+  const sub =
+    subtotal();
 
 
   if ($("cartCount"))
@@ -442,7 +514,8 @@ function renderCart() {
 
 
   if ($("subtotal"))
-    $("subtotal").textContent = money(sub);
+    $("subtotal").textContent =
+      money(sub);
 
 
   if ($("delivery"))
@@ -454,18 +527,20 @@ function renderCart() {
     $("checkoutTotal").textContent =
       money(
         sub +
-        (cart.length
-          ? DELIVERY_CHARGE
-          : 0)
+        (
+          cart.length
+            ? DELIVERY_CHARGE
+            : 0
+        )
       );
 
 
-  const list = $("cartList");
+  const list =
+    $("cartList");
 
-  if (!list) return;
+  if (!list)
+    return;
 
-
-  /* EMPTY BAG */
 
   if (!cart.length) {
 
@@ -478,6 +553,7 @@ function renderCart() {
     `;
 
     return;
+
   }
 
 
@@ -487,15 +563,19 @@ function renderCart() {
   cart.forEach(x => {
 
     const product =
-      PRODUCTS.find(p => p.id === x.id);
+      PRODUCTS.find(
+        p => p.id === x.id
+      );
 
-    if (!product) return;
+    if (!product)
+      return;
 
 
     const el =
       document.createElement("div");
 
-    el.className = "cart-item";
+    el.className =
+      "cart-item";
 
 
     el.innerHTML = `
@@ -551,17 +631,28 @@ function renderCart() {
 
     el.querySelector(".minus")
       .onclick =
-      () => change(product.id, -1);
+      () =>
+        change(
+          product.id,
+          -1
+        );
 
 
     el.querySelector(".plus")
       .onclick =
-      () => change(product.id, 1);
+      () =>
+        change(
+          product.id,
+          1
+        );
 
 
     el.querySelector(".remove")
       .onclick =
-      () => removeItem(product.id);
+      () =>
+        removeItem(
+          product.id
+        );
 
 
     list.appendChild(el);
@@ -577,25 +668,33 @@ function renderCart() {
 
 function openCart() {
 
-  $("cart")?.classList.add("open");
+  $("cart")
+    ?.classList
+    .add("open");
 
-  $("screen")?.classList.add("show");
+  $("screen")
+    ?.classList
+    .add("show");
 
 }
 
 
 function closeCart() {
 
-  $("cart")?.classList.remove("open");
+  $("cart")
+    ?.classList
+    .remove("open");
 
 
   if (
     !$("mobilePanel")
-      ?.classList.contains("open")
+      ?.classList
+      .contains("open")
   ) {
 
     $("screen")
-      ?.classList.remove("show");
+      ?.classList
+      .remove("show");
 
   }
 
@@ -611,47 +710,54 @@ function renderCategoriesHome() {
   const grid =
     $("categoryGrid");
 
-  if (!grid) return;
+  if (!grid)
+    return;
 
 
   grid.innerHTML = "";
 
 
-  CATEGORIES.forEach((cat, i) => {
+  CATEGORIES.forEach(
+    (cat, i) => {
 
-    const el =
-      document.createElement("a");
-
-    el.className =
-      "category-card";
+      const el =
+        document.createElement("a");
 
 
-    el.href =
-      `products.html${cat.name === "All"
-        ? ""
-        : "?category=" +
-        encodeURIComponent(cat.name)
-      }`;
+      el.className =
+        "category-card";
 
 
-    el.innerHTML = `
-      <span class="num">
-        0${i + 1}
-      </span>
-
-      <h3>
-        ${escape(cat.name)}
-      </h3>
-
-      <span>
-        ${escape(cat.sub)} ↗
-      </span>
-    `;
+      el.href =
+        `products.html${
+          cat.name === "All"
+            ? ""
+            : "?category=" +
+              encodeURIComponent(
+                cat.name
+              )
+        }`;
 
 
-    grid.appendChild(el);
+      el.innerHTML = `
+        <span class="num">
+          0${i + 1}
+        </span>
 
-  });
+        <h3>
+          ${escape(cat.name)}
+        </h3>
+
+        <span>
+          ${escape(cat.sub)} ↗
+        </span>
+      `;
+
+
+      grid.appendChild(el);
+
+    }
+  );
 
 }
 
@@ -665,11 +771,10 @@ function productCard(p) {
   const card =
     document.createElement("article");
 
+
   card.className =
     "product-card";
 
-
-  /* STOCK DISPLAY */
 
   const stockHTML =
     p.stock > 0
@@ -686,8 +791,6 @@ function productCard(p) {
         </span>
       `;
 
-
-  /* BUTTON */
 
   const buttonHTML =
     p.stock > 0
@@ -712,14 +815,15 @@ function productCard(p) {
 
     <div class="product-image">
 
-      ${p.badge
-      ? `
+      ${
+        p.badge
+          ? `
             <span class="product-badge">
               ${escape(p.badge)}
             </span>
           `
-      : ""
-    }
+          : ""
+      }
 
       <img
         src="${img(p.image)}"
@@ -744,7 +848,6 @@ function productCard(p) {
         ${escape(p.name)}
       </h3>
 
-
       <div class="product-row">
 
         <span class="product-price">
@@ -755,7 +858,6 @@ function productCard(p) {
 
       </div>
 
-
       ${stockHTML}
 
     </div>
@@ -763,14 +865,15 @@ function productCard(p) {
   `;
 
 
-  /* PRODUCT IMAGE CLICK */
-
   card
     .querySelector(".product-image")
-    .onclick = e => {
+    .onclick =
+    e => {
 
       if (
-        !e.target.closest(".quick-view")
+        !e.target.closest(
+          ".quick-view"
+        )
       ) {
 
         openProductDetail(p);
@@ -780,11 +883,10 @@ function productCard(p) {
     };
 
 
-  /* QUICK VIEW */
-
   card
     .querySelector(".quick-view")
-    .onclick = e => {
+    .onclick =
+    e => {
 
       e.stopPropagation();
 
@@ -793,11 +895,10 @@ function productCard(p) {
     };
 
 
-  /* ADD BUTTON */
-
   card
     .querySelector(".add-small")
-    .onclick = () => {
+    .onclick =
+    () => {
 
       if (p.stock > 0) {
 
@@ -859,8 +960,6 @@ function openProductDetail(p) {
     p.description;
 
 
-  /* SHOW STOCK IN DETAIL */
-
   const stockElement =
     $("detailStock");
 
@@ -875,8 +974,6 @@ function openProductDetail(p) {
   }
 
 
-  /* DETAIL ADD BUTTON */
-
   const detailAdd =
     $("detailAdd");
 
@@ -885,14 +982,16 @@ function openProductDetail(p) {
 
     if (p.stock > 0) {
 
-      detailAdd.disabled = false;
+      detailAdd.disabled =
+        false;
 
       detailAdd.textContent =
         "Add to bag +";
 
     } else {
 
-      detailAdd.disabled = true;
+      detailAdd.disabled =
+        true;
 
       detailAdd.textContent =
         "STOCK OUT";
@@ -903,11 +1002,13 @@ function openProductDetail(p) {
 
 
   $("productOverlay")
-    .classList.add("show");
+    .classList
+    .add("show");
 
 
   document.body
-    .classList.add("no-scroll");
+    .classList
+    .add("no-scroll");
 
 
   history.pushState(
@@ -930,11 +1031,13 @@ function closeProductDetail() {
 
 
   $("productOverlay")
-    .classList.remove("show");
+    .classList
+    .remove("show");
 
 
   document.body
-    .classList.remove("no-scroll");
+    .classList
+    .remove("no-scroll");
 
 
   if (
@@ -967,7 +1070,8 @@ function renderProductsPage() {
   const grid =
     $("productGrid");
 
-  if (!grid) return;
+  if (!grid)
+    return;
 
 
   const tabs =
@@ -979,64 +1083,75 @@ function renderProductsPage() {
     tabs.innerHTML = "";
 
 
-    CATEGORIES.forEach(cat => {
+    CATEGORIES.forEach(
+      cat => {
 
-      const b =
-        document.createElement("button");
-
-
-      b.className =
-        cat.name === selectedCategory
-          ? "active"
-          : "";
+        const b =
+          document.createElement(
+            "button"
+          );
 
 
-      b.textContent =
-        cat.name;
+        b.className =
+          cat.name ===
+          selectedCategory
+            ? "active"
+            : "";
 
 
-      b.onclick = () => {
-
-        selectedCategory =
+        b.textContent =
           cat.name;
 
-        renderProductsPage();
 
-      };
+        b.onclick =
+          () => {
+
+            selectedCategory =
+              cat.name;
+
+            renderProductsPage();
+
+          };
 
 
-      tabs.appendChild(b);
+        tabs.appendChild(b);
 
-    });
+      }
+    );
 
   }
 
 
   const items =
-    PRODUCTS.filter(p => {
+    PRODUCTS.filter(
+      p => {
 
-      const c =
-        selectedCategory === "All" ||
-        p.category === selectedCategory;
-
-
-      const s =
-        !search ||
-        p.name
-          .toLowerCase()
-          .includes(
-            search.toLowerCase()
-          );
+        const c =
+          selectedCategory ===
+            "All" ||
+          p.category ===
+            selectedCategory;
 
 
-      return c && s;
+        const s =
+          !search ||
+          p.name
+            .toLowerCase()
+            .includes(
+              search.toLowerCase()
+            );
 
-    });
+
+        return c && s;
+
+      }
+    );
 
 
   if ($("resultCount")) {
 
-    $("resultCount").textContent =
+    $("resultCount")
+      .textContent =
       `${items.length} PRODUCTS`;
 
   }
@@ -1045,13 +1160,15 @@ function renderProductsPage() {
   grid.innerHTML = "";
 
 
-  items.forEach(p => {
+  items.forEach(
+    p => {
 
-    grid.appendChild(
-      productCard(p)
-    );
+      grid.appendChild(
+        productCard(p)
+      );
 
-  });
+    }
+  );
 
 }
 
@@ -1065,7 +1182,8 @@ function renderFeatured() {
   const grid =
     $("featuredGrid");
 
-  if (!grid) return;
+  if (!grid)
+    return;
 
 
   grid.innerHTML = "";
@@ -1073,48 +1191,105 @@ function renderFeatured() {
 
   PRODUCTS
     .slice(0, 4)
-    .forEach(p => {
+    .forEach(
+      p => {
 
-      grid.appendChild(
-        productCard(p)
-      );
+        grid.appendChild(
+          productCard(p)
+        );
 
-    });
+      }
+    );
 
 }
+
 
 /* ==========================================================
    SUBMIT ORDER TO ONLINE DATABASE
    ========================================================== */
 
+/*
+   FIX:
+   This MUST match your new FastAPI OrderRequest:
+
+   {
+     customer: {
+       name,
+       phone,
+       address,
+       note
+     },
+     items: [...]
+   }
+
+   Your previous error:
+   "Field required: customer"
+
+   happens when the old flat format is sent.
+*/
+
 async function submitDatabaseOrder(customer) {
 
   const response =
-    await fetch(`${API_BASE_URL}/api/orders`, {
+    await fetch(
+      `${API_BASE_URL}/api/orders`,
+      {
+        method: "POST",
 
-      method: "POST",
-
-      headers: {
-        "Content-Type": "application/json"
-      },
-
-      body: JSON.stringify({
-
-        customer: {
-          name: customer.name,
-          phone: customer.phone,
-          address: customer.address,
-          note: customer.note
+        headers: {
+          "Content-Type":
+            "application/json"
         },
 
-        items: cart.map(item => ({
-          product_id: item.id,
-          quantity: item.qty
-        }))
+        /*
+           FIX:
+           Send customer as an object.
+        */
 
-      })
+        body: JSON.stringify({
 
-    });
+          customer: {
+
+            name:
+              customer.name,
+
+            phone:
+              customer.phone,
+
+            address:
+              customer.address,
+
+            note:
+              customer.note
+
+          },
+
+          items:
+            cart.map(
+              item => ({
+
+                product_id:
+                  item.id,
+
+                quantity:
+                  item.qty
+
+              })
+            ),
+
+          /*
+             FIX:
+             Explicitly send delivery charge
+             so frontend and backend agree.
+          */
+
+          delivery_charge:
+            DELIVERY_CHARGE
+
+        })
+
+      }
+    );
 
 
   const data =
@@ -1126,12 +1301,17 @@ async function submitDatabaseOrder(customer) {
     let errorMessage =
       "Order could not be completed.";
 
-    if (typeof data.detail === "string") {
+
+    if (
+      typeof data.detail ===
+      "string"
+    ) {
 
       errorMessage =
         data.detail;
 
     }
+
     else if (data.detail) {
 
       errorMessage =
@@ -1140,6 +1320,7 @@ async function submitDatabaseOrder(customer) {
         );
 
     }
+
 
     throw new Error(
       errorMessage
@@ -1165,30 +1346,38 @@ function buildMessage(customer) {
     `--------------------%0A`;
 
 
-  cart.forEach((x, i) => {
+  cart.forEach(
+    (x, i) => {
 
-    const p =
-      PRODUCTS.find(
-        p => p.id === x.id
-      );
+      const p =
+        PRODUCTS.find(
+          p => p.id === x.id
+        );
 
 
-    if (p) {
+      if (p) {
 
-      m +=
-        `${i + 1}. ` +
-        `${encodeURIComponent(p.name)}` +
-        `%0A`;
+        m +=
+          `${i + 1}. ` +
+          `${encodeURIComponent(
+            p.name
+          )}` +
+          `%0A`;
 
-      m +=
-        `Qty: ${x.qty}%0A`;
 
-      m +=
-        `Price: ৳${p.price * x.qty}%0A`;
+        m +=
+          `Qty: ${x.qty}%0A`;
+
+
+        m +=
+          `Price: ৳${
+            p.price * x.qty
+          }%0A`;
+
+      }
 
     }
-
-  });
+  );
 
 
   const sub =
@@ -1222,24 +1411,32 @@ function buildMessage(customer) {
 
   m +=
     `%0AName: ` +
-    `${encodeURIComponent(customer.name)}`;
+    `${encodeURIComponent(
+      customer.name
+    )}`;
 
 
   m +=
     `%0APhone: ` +
-    `${encodeURIComponent(customer.phone)}`;
+    `${encodeURIComponent(
+      customer.phone
+    )}`;
 
 
   m +=
     `%0AAddress: ` +
-    `${encodeURIComponent(customer.address)}`;
+    `${encodeURIComponent(
+      customer.address
+    )}`;
 
 
   if (customer.note) {
 
     m +=
       `%0ANote: ` +
-      `${encodeURIComponent(customer.note)}`;
+      `${encodeURIComponent(
+        customer.note
+      )}`;
 
   }
 
@@ -1261,8 +1458,6 @@ $("checkoutForm")
       e.preventDefault();
 
 
-      /* BAG EMPTY CHECK */
-
       if (!cart.length) {
 
         alert(
@@ -1274,12 +1469,19 @@ $("checkoutForm")
       }
 
 
-      /* LIVE STOCK CHECK */
+      /*
+         FIX:
+         Always refresh stock immediately
+         before placing an order.
+      */
+
+      await loadDatabaseStock();
+
 
       if (!stockReady) {
 
         alert(
-          "Live stock is still loading. Please wait a moment and try again."
+          "Live stock could not be loaded. Please try again."
         );
 
         return;
@@ -1287,21 +1489,18 @@ $("checkoutForm")
       }
 
 
-      /* REFRESH LIVE STOCK */
+      /*
+         Check the newest stock.
+      */
 
-      await loadDatabaseStock();
-
-      if (!stockReady)
-        return;
-
-
-      /* CHECK STOCK ONE MORE TIME */
-
-      for (const item of cart) {
+      for (
+        const item of cart
+      ) {
 
         const product =
           PRODUCTS.find(
-            p => p.id === item.id
+            p =>
+              p.id === item.id
           );
 
 
@@ -1309,11 +1508,15 @@ $("checkoutForm")
           continue;
 
 
-        if (item.qty > product.stock) {
+        if (
+          item.qty >
+          product.stock
+        ) {
 
           alert(
             `${product.name} does not have enough stock. Only ${product.stock} available.`
           );
+
 
           renderCart();
 
@@ -1351,32 +1554,87 @@ $("checkoutForm")
       };
 
 
-      /* BUILD MESSAGE BEFORE ORDER */
+      /*
+         Build WhatsApp message
+         BEFORE clearing the cart.
+      */
 
       const message =
-        buildMessage(customer);
-
-
-      /* SEND ORDER TO ONLINE DATABASE */
-
-      try {
-
-        await submitDatabaseOrder(
+        buildMessage(
           customer
         );
 
 
-        /* ORDER SUCCESSFUL */
+      /*
+         SEND ORDER TO DATABASE
+
+         IMPORTANT:
+         The backend is responsible for
+         reducing stock.
+      */
+
+      try {
+
+        const orderResult =
+          await submitDatabaseOrder(
+            customer
+          );
 
 
-        /* CLEAR BAG */
+        /*
+           FIX:
+           Backend has now successfully
+           reduced the central stock.
+
+           Use backend returned stock
+           immediately.
+        */
+
+        if (
+          orderResult &&
+          Array.isArray(
+            orderResult.products
+          )
+        ) {
+
+          orderResult.products
+            .forEach(
+              dbProduct => {
+
+                const product =
+                  PRODUCTS.find(
+                    p =>
+                      p.id ===
+                      dbProduct.id
+                  );
+
+                if (product) {
+
+                  product.stock =
+                    Number(
+                      dbProduct.stock
+                    );
+
+                }
+
+              }
+            );
+
+        }
+
+
+        /*
+           ORDER SUCCESSFUL
+        */
 
         cart = [];
 
         save();
 
 
-        /* UPDATE WEBSITE */
+        /*
+           Update UI immediately.
+        */
 
         renderCart();
 
@@ -1385,14 +1643,18 @@ $("checkoutForm")
         renderProductsPage();
 
 
-        /* CLOSE CHECKOUT */
+        /*
+           Close checkout.
+        */
 
         $("checkoutModal")
           ?.classList
           .remove("show");
 
 
-        /* OPEN WHATSAPP */
+        /*
+           Open WhatsApp.
+        */
 
         window.open(
           `https://wa.me/${WHATSAPP_NUMBER}?text=${message}`,
@@ -1400,9 +1662,15 @@ $("checkoutForm")
         );
 
 
-        /* GET UPDATED STOCK */
+        /*
+           FIX:
+           Do another fresh database
+           sync after successful order.
+        */
 
-        loadDatabaseStock();
+        await loadDatabaseStock(
+          false
+        );
 
 
       } catch (error) {
@@ -1547,11 +1815,11 @@ $("closeSearch")
 
 
       if ($("searchInput"))
-        $("searchInput").value = "";
+        $("searchInput").value =
+          "";
 
 
       search = "";
-
 
       renderProductsPage();
 
@@ -1737,11 +2005,26 @@ renderProductsPage();
 
 renderCart();
 
-/* LOAD LIVE STOCK */
-loadDatabaseStock();
 
-/* AUTO SYNC LIVE STOCK EVERY 5 SECONDS */
+/*
+   FIX:
+   First load the central database.
+*/
+
+loadDatabaseStock(true);
+
+
+/*
+   FIX:
+   Automatically synchronize every 5 seconds.
+
+   false = don't show an alert every 5 seconds
+   if the server temporarily fails.
+*/
+
 setInterval(
-  loadDatabaseStock,
+  () => {
+    loadDatabaseStock(false);
+  },
   5000
 );
