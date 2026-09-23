@@ -710,7 +710,7 @@ body{
 }
 
 .cart-item{
-  animation:cartItemIn .35s ease both;
+  animation:none;
 }
 
 @keyframes cartItemIn{
