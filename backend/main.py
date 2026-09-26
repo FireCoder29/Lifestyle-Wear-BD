@@ -218,6 +218,7 @@ def init_db():
                     )
                     VALUES
                     (%s,%s,%s,%s,%s,%s,%s,%s)
+                    ON CONFLICT (id) DO NOTHING
                     """,
                     INITIAL_PRODUCTS,
                 )
