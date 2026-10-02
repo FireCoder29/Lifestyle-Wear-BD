@@ -26,7 +26,7 @@ const PRODUCTS = [
     image: "images/DS-1.webp",
     category: "Drop-Shoulder",
     stock: 15,
-    badge: "You know",
+    badge: "New",
     description: "A clean, comfortable piece selected for everyday elegance."
   },
 
